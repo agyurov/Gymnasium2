@@ -2,11 +2,20 @@
 
 # dev.set(dev.list()[???]])
 
+
+# General functions -------------------------------------------------------
+
+
 # Run it
 main = function(){
-  cat("\014")
   source("main.R")
 }
+
+# save variables to data_file.RData
+record = function(file = data_file){
+  save.image(file)
+}
+
 #
 unique.data = function(df){
   return(lapply(df,unique))
@@ -218,10 +227,7 @@ bucket = function(...,add = F,env = .BucketEnv,short=T,rmv=F){
   }
 }
 
-# save variables to data_file.RData
-record = function(file = data_file){
-  save.image(file)
-}
+
 
 # data frame factor to numerics
 fact2num = function(y){
@@ -444,6 +450,41 @@ invert.level = function(x,vars = NULL){
     x[,i] = factor(x[,i],labels=rev(levels(x[,i])[levels(x[,i])%in%unique(x[,i])]))
   }
   return(x)
+}
+
+
+
+# Gymnasium 2 functions ---------------------------------------------------
+
+# Add missing factor levels
+fill.levels = function(x,y,...){
+  # x the data frame
+  # y the qustions as character vector
+  tmp = x[,grepl(y,names(x),fixed=T)]
+  maxlev = which.max(unlist(lapply(tmp,function(x) length(levels(x)))))
+  maxlev = levels(tmp[,maxlev])
+  tmp = do.call(cbind.data.frame,lapply(tmp,function(x,y) x=factor(x,levels=y),y=maxlev))
+  x[,grepl(y,names(x),fixed=T)] = tmp
+  return(x)
+}
+
+# Rename factor levels new
+
+rm.char.factor = function(x){
+  # x the factor vector
+  if(is.factor(x)){
+    shitbug = c("æ","ø","å")
+    for(i in shitbug){
+      x = tolower(x)
+      x = gsub(" ","",x,fixed=T)
+      x = iconv(x, "latin1", "ASCII", sub="")
+    }
+    #x = factor(x)
+    return(x)
+  }
+  if(!is.factor(x)){
+    return(x)
+  }
 }
 
 

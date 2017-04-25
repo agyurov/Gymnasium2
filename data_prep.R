@@ -67,39 +67,18 @@ fb$platform = factor(rep("fb",nrow(fb)),levels = c("fb","ig","sc"))
 ig$platform = factor(rep("ig",nrow(ig)),levels = c("fb","ig","sc"))
 sc$platform = factor(rep("sc",nrow(sc)),levels = c("fb","ig","sc"))
 
-## Create a master data frame
-df = list(fb=fb,ig=ig,sc=sc)
-
 # Fix factor levels -------------------------------------------------------
-
-# Remove Danish characters from factors
-rm.char.factor = function(x){
-  if(is.factor(x)){
-    for(i in c("æ","ø","å")){
-      x = gsub(i,"",x)
-      x = factor(x,levels = gsub(i,"",unique(x)))
-    }
-    return(x)
-  }
-  return(x)
-}
 
 fb = do.call(cbind.data.frame,lapply(fb,rm.char.factor))
 ig = do.call(cbind.data.frame,lapply(ig,rm.char.factor))
 sc = do.call(cbind.data.frame,lapply(sc,rm.char.factor))
 
-# Add missing factor levels
-fill.levels = function(x,y,...){
-  # x the data frame
-  # y the qustions as character vector
-  tmp = x[,grepl(y,names(x),fixed=T)]
-  maxlev = which.max(unlist(lapply(tmp,function(x) length(levels(x)))))
-  maxlev = levels(tmp[,maxlev])
-  tmp = do.call(cbind.data.frame,lapply(tmp,function(x,y) x=factor(x,levels=y),y=maxlev))
-  x[,grepl(y,names(x),fixed=T)] = tmp
-  return(x)
-}
-# 
+
+# Rename factor levels ----------------------------------------------------
+# convert levels to num to char to fact
+# First define question groups
+
+#
 fb = fill.levels(fb,"q1.")
 fb = fill.levels(fb,"q8.")
 sc = fill.levels(sc,"q1.")
@@ -107,10 +86,95 @@ sc = fill.levels(sc,"q8.")
 ig = fill.levels(ig,"q1.")
 ig = fill.levels(ig,"q8.")
 
+# Factor levels to character numbers --------------------------------------
+
+qlev = list()
+qlev$aldrig = 1
+qlev$sjldent = 2
+qlev$sjlendt = 2 # cool grammar mistake
+qlev$noglegange = 3
+qlev$ofte = 4
+
+qlev$megetuenig = 1
+qlev$uenig = 2
+qlev$enig = 3
+qlev$megetenig = 4
+
+qlev$engangitimenellermere = 7
+qlev$fleregangeomdagen = 6
+qlev$ca.engangomdagen = 5
+qlev$fleregangeomugen = 4
+qlev$ca.engangomugen = 3
+qlev$mindre = 2
+qlev$aldrig = 1
+
+qlev$megetsikker = 4
+qlev$sikker = 3
+qlev$usikker = 2
+qlev$megetusikker = 1 #unlist(qlev[levels(x)])
+
+
+
+# No1 has chosen option X in the survey  ----------------------------------
+
+# Manula fix for missing level in q8
+levels(ig$q8.1_freqpost) = c(levels(ig$q8.1_freqpost),
+                             levels(fb$q8.1_freqpost)[!levels(fb$q8.1_freqpost) %in% levels(ig$q8.1_freqpost)])
+levels(ig$q8.2_freqsend) = c(levels(ig$q8.2_freqsend),
+                             levels(fb$q8.2_freqsend)[!levels(fb$q8.2_freqsend) %in% levels(ig$q8.2_freqsend)])
+levels(ig$q8.3_freqread) = c(levels(ig$q8.3_freqread),
+                             levels(fb$q8.3_freqread)[!levels(fb$q8.3_freqread) %in% levels(ig$q8.3_freqread)])
+
+#  ------------------------------------------------------------------------
+
+# fb
+for(i in 1:(ncol(fb)-1)){ # do not include the labeling column
+  if(is.factor(fb[,i]) && levels(fb[,i]) %in% names(qlev)){
+    levels(fb[,i]) = unlist(qlev[levels(fb[,i])])
+  }
+}
+
+# ig
+x = ig #
+
+  
+for(i in 1:(ncol(ig)-1)){ # do not include the labeling column
+  if(is.factor(ig[,i]) && levels(ig[,i]) %in% names(qlev)){
+    levels(ig[,i]) = unlist(qlev[levels(ig[,i])])
+  }
+}
+
+# sc
+for(i in 1:(ncol(sc)-1)){ # do not include the labeling column
+  if(is.factor(sc[,i]) && levels(sc[,i]) %in% names(qlev)){
+    levels(sc[,i]) = unlist(qlev[levels(sc[,i])])
+  }
+}
 
 
 
 
+
+# Master df list ----------------------------------------------------------
+df = list(fb=fb,ig=ig,sc=sc)
+
+
+# unordered factors -------------------------------------------------------
+
+dfu = df
+
+
+# ordered factors ---------------------------------------------------------
+
+dfo = lapply(df,ordfactordf,ordered=T)
+names(dfo) = paste0(names(df),"o")
+
+
+
+
+
+
+# z = lapply(tmp, function(x,y) levels(x) = unlist(y[levels(x)]),y = qlev)
 
 
 
