@@ -1,6 +1,12 @@
 # functions
 
 # dev.set(dev.list()[???]])
+
+# Run it
+main = function(){
+  cat("\014")
+  source("main.R")
+}
 #
 unique.data = function(df){
   return(lapply(df,unique))
