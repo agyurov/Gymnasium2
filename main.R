@@ -4,6 +4,9 @@ rm(list = ls())
 # .pardefault = par()
 wd = getwd()
 
+# Fix the repos... ITU IT gods
+# install.packages('package', repos='http://cran.us.r-project.org')
+
 data_file = "all_data.RData"
 
 source("libraries.R")

@@ -195,10 +195,13 @@ for(i in 1:(ncol(sc)-1)){ # do not include the labeling column
 
 
 
+# Add time ----------------------------------------------------------------
+
+df0.list$fb0$time
 
 
 # Master df list ----------------------------------------------------------
-df.list = list(fb=  fb,ig=ig, sc = sc)
+df.list = list(fb = fb,ig = ig, sc = sc)
 
 
 # unordered factors -------------------------------------------------------
@@ -209,11 +212,10 @@ dfu = rbind(fb,ig,sc)
 # ordered factors ---------------------------------------------------------
 
 dfo = ordfactordf(dfu,ordered=T)
-
-
-
-
-
+dfo$q3.1_gender = factor(dfo$q3.1_gender,ordered=F)
+dfo$q5.1_digedu = factor(dfo$q5.1_digedu,ordered=F)
+dfo$q6.1_school = factor(dfo$q6.1_school,ordered=F)
+dfo$platform = factor(dfo$platform,ordered=F)
 
 
 
