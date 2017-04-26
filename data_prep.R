@@ -4,7 +4,10 @@ fb = read.csv(dir()[grepl("facebook",tolower(dir()),fixed=T)],encoding = "UTF-8"
 ig = read.csv(dir()[grepl("instagram",tolower(dir()),fixed=T)],encoding = "UTF-8")
 sc = read.csv(dir()[grepl("snapchat",tolower(dir()),fixed=T)],encoding = "UTF-8")
 
-## Column names
+
+
+# Column names ------------------------------------------------------------
+
 
 names(fb) = tolower(names(fb))
 names(ig) = tolower(names(ig))
@@ -36,6 +39,10 @@ eng_names = eng_names[-1]
 names(fb) = names(ig) = names(sc) = eng_names
 
 
+# Original data -----------------------------------------------------------
+
+df0.list = list(fb0 = fb, ig0 = ig, sc0 = sc)
+
 
 
 # Question numbers --------------------------------------------------------
@@ -51,6 +58,8 @@ final_names = paste0(full_q_num,"_",eng_names)
 names(fb) = final_names
 names(ig) = final_names
 names(sc) = final_names
+
+
 
 
 # Fix variable classes ----------------------------------------------------
@@ -86,6 +95,35 @@ sc = fill.levels(sc,"q8.")
 ig = fill.levels(ig,"q1.")
 ig = fill.levels(ig,"q8.")
 
+
+# Manually fix factor levels, grammar mistakes stc ------------------------
+fblev = lapply(fb,levels)
+sclev = lapply(sc,levels)
+iglev = lapply(ig,levels)
+
+# for(i in 1:length(fblev)){
+#   cat("\014")
+#   print(names(fblev)[i])
+#   x = c(fb=fblev[i],sc=sclev[i],ig=iglev[i])
+#   print(table(unlist(x)))
+#   readline("Press any key to continue lol...")
+# }
+# ig q1, sjldent to sjlendt
+# ig q8, add level engangitimenellermere
+
+# ...the fix
+x = ig
+levels(ig$q1.1_usefb) = levels(fb$q1.1_usefb)
+levels(ig$q1.2_useig) = levels(fb$q1.1_usefb)
+levels(ig$q1.3_usesc) = levels(fb$q1.1_usefb)
+
+levels(ig$q8.1_freqpost) = c(levels(ig$q8.1_freqpost),
+                             levels(fb$q8.1_freqpost)[!levels(fb$q8.1_freqpost) %in% levels(ig$q8.1_freqpost)])
+levels(ig$q8.2_freqsend) = c(levels(ig$q8.2_freqsend),
+                             levels(fb$q8.2_freqsend)[!levels(fb$q8.2_freqsend) %in% levels(ig$q8.2_freqsend)])
+levels(ig$q8.3_freqread) = c(levels(ig$q8.3_freqread),
+                             levels(fb$q8.3_freqread)[!levels(fb$q8.3_freqread) %in% levels(ig$q8.3_freqread)])
+
 # Factor levels to character numbers --------------------------------------
 
 qlev = list()
@@ -106,7 +144,6 @@ qlev$ca.engangomdagen = 5
 qlev$fleregangeomugen = 4
 qlev$ca.engangomugen = 3
 qlev$mindre = 2
-qlev$aldrig = 1
 
 qlev$megetsikker = 4
 qlev$sikker = 3
@@ -115,22 +152,25 @@ qlev$megetusikker = 1 #unlist(qlev[levels(x)])
 
 
 
-# No1 has chosen option X in the survey  ----------------------------------
+# Reorder levels ----------------------------------------------------------
 
-# Manula fix for missing level in q8
-levels(ig$q8.1_freqpost) = c(levels(ig$q8.1_freqpost),
-                             levels(fb$q8.1_freqpost)[!levels(fb$q8.1_freqpost) %in% levels(ig$q8.1_freqpost)])
-levels(ig$q8.2_freqsend) = c(levels(ig$q8.2_freqsend),
-                             levels(fb$q8.2_freqsend)[!levels(fb$q8.2_freqsend) %in% levels(ig$q8.2_freqsend)])
-levels(ig$q8.3_freqread) = c(levels(ig$q8.3_freqread),
-                             levels(fb$q8.3_freqread)[!levels(fb$q8.3_freqread) %in% levels(ig$q8.3_freqread)])
+# orderq1 = c(1,4,2,3)
+# orderq2 = c(3,4,1,2)
+# orderq7 = c(3,4,1,2)
+# orderq8 = c(1,7,3,6,2,5,4)
+# 
+# x = ig$q8.1_freqpost
+# levels(factor(x,levels(x)[c(1,7,3,6,2,5,4)]))
 
-#  ------------------------------------------------------------------------
+
+# Levels to character numbers (easier) ------------------------------------
+
 
 # fb
 for(i in 1:(ncol(fb)-1)){ # do not include the labeling column
   if(is.factor(fb[,i]) && levels(fb[,i]) %in% names(qlev)){
     levels(fb[,i]) = unlist(qlev[levels(fb[,i])])
+    fb[,i] = factor(as.numeric(as.character(fb[,i])))
   }
 }
 
@@ -141,6 +181,7 @@ x = ig #
 for(i in 1:(ncol(ig)-1)){ # do not include the labeling column
   if(is.factor(ig[,i]) && levels(ig[,i]) %in% names(qlev)){
     levels(ig[,i]) = unlist(qlev[levels(ig[,i])])
+    ig[,i] = factor(as.numeric(as.character(ig[,i])))
   }
 }
 
@@ -148,6 +189,7 @@ for(i in 1:(ncol(ig)-1)){ # do not include the labeling column
 for(i in 1:(ncol(sc)-1)){ # do not include the labeling column
   if(is.factor(sc[,i]) && levels(sc[,i]) %in% names(qlev)){
     levels(sc[,i]) = unlist(qlev[levels(sc[,i])])
+    sc[,i] = factor(as.numeric(as.character(sc[,i])))
   }
 }
 
@@ -156,25 +198,22 @@ for(i in 1:(ncol(sc)-1)){ # do not include the labeling column
 
 
 # Master df list ----------------------------------------------------------
-df = list(fb=fb,ig=ig,sc=sc)
+df.list = list(fb=  fb,ig=ig, sc = sc)
 
 
 # unordered factors -------------------------------------------------------
 
-dfu = df
+dfu = rbind(fb,ig,sc)
 
 
 # ordered factors ---------------------------------------------------------
 
-dfo = lapply(df,ordfactordf,ordered=T)
-names(dfo) = paste0(names(df),"o")
+dfo = ordfactordf(dfu,ordered=T)
 
 
 
 
 
-
-# z = lapply(tmp, function(x,y) levels(x) = unlist(y[levels(x)]),y = qlev)
 
 
 
