@@ -11,7 +11,7 @@ data_file = "all_data.RData"
 
 source("libraries.R")
 
-source("functions.R")
+source("Rfunctions/Rfunctions.R")
 
 source("data_prep.R")
 
@@ -24,3 +24,5 @@ source("data_prep.R")
 
 
   
+# bucket.classes(classes=c("data.frame"))
+# with(.BucketEnv,save.image(paste0(getwd(),"/bucket.RData")))
