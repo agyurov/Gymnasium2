@@ -42,7 +42,7 @@ names(fb) = names(ig) = names(sc) = eng_names
 # Original data -----------------------------------------------------------
 
 df0.list = list(fb0 = fb, ig0 = ig, sc0 = sc)
-
+df0.df = do.call(rbind.data.frame,df0.list)
 
 
 # Question numbers --------------------------------------------------------
@@ -218,4 +218,19 @@ dfo$q6.1_school = factor(dfo$q6.1_school,ordered=F)
 dfo$platform = factor(dfo$platform,ordered=F)
 
 
+
+# Verify factor level conversion ------------------------------------------
+
+for(i in 2:ncol(df0.df)){ # dfo and dfu have 1 more column "platform"
+  x = df0.df[,i]
+  y = dfo[,i]
+  t = table(x,y)
+  if(any(apply(t,2,function(x) length(x[x!=0])) > 1)){ # check in dfo, cuz levels are fixed
+    print(table(x,y))
+    cat(print(paste0("Differences in ",names(dfo)[i])))
+    # readline("Next..")
+  } 
+}
+
+# Cool everything is fine
 

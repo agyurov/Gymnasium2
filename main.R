@@ -24,5 +24,5 @@ source("data_prep.R")
 
 
   
-# bucket.classes(classes=c("data.frame"))
+bucket.classes(classes=c("data.frame"))
 # with(.BucketEnv,save.image(paste0(getwd(),"/bucket.RData")))
