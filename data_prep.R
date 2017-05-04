@@ -42,7 +42,7 @@ names(fb) = names(ig) = names(sc) = eng_names
 # Original data -----------------------------------------------------------
 
 df0.list = list(fb0 = fb, ig0 = ig, sc0 = sc)
-df0.df = do.call(rbind.data.frame,df0.list)
+
 
 
 # Question numbers --------------------------------------------------------
@@ -150,22 +150,8 @@ qlev$sikker = 3
 qlev$usikker = 2
 qlev$megetusikker = 1 #unlist(qlev[levels(x)])
 
-
-
-# Reorder levels ----------------------------------------------------------
-
-# orderq1 = c(1,4,2,3)
-# orderq2 = c(3,4,1,2)
-# orderq7 = c(3,4,1,2)
-# orderq8 = c(1,7,3,6,2,5,4)
-# 
-# x = ig$q8.1_freqpost
-# levels(factor(x,levels(x)[c(1,7,3,6,2,5,4)]))
-
-
 # Levels to character numbers (easier) ------------------------------------
-
-
+fbX = fb
 # fb
 for(i in 1:(ncol(fb)-1)){ # do not include the labeling column
   if(is.factor(fb[,i]) && levels(fb[,i]) %in% names(qlev)){
@@ -175,9 +161,7 @@ for(i in 1:(ncol(fb)-1)){ # do not include the labeling column
 }
 
 # ig
-x = ig #
-
-  
+igX = ig
 for(i in 1:(ncol(ig)-1)){ # do not include the labeling column
   if(is.factor(ig[,i]) && levels(ig[,i]) %in% names(qlev)){
     levels(ig[,i]) = unlist(qlev[levels(ig[,i])])
@@ -186,6 +170,7 @@ for(i in 1:(ncol(ig)-1)){ # do not include the labeling column
 }
 
 # sc
+scX = sc
 for(i in 1:(ncol(sc)-1)){ # do not include the labeling column
   if(is.factor(sc[,i]) && levels(sc[,i]) %in% names(qlev)){
     levels(sc[,i]) = unlist(qlev[levels(sc[,i])])
@@ -193,44 +178,68 @@ for(i in 1:(ncol(sc)-1)){ # do not include the labeling column
   }
 }
 
-
-
-# Add time ----------------------------------------------------------------
-
-df0.list$fb0$time
-
-
 # Master df list ----------------------------------------------------------
 df.list = list(fb = fb,ig = ig, sc = sc)
+dfu = rbind(fb,ig,sc)
+
+# change order of levels (NOT ordering the factor!!!!)
+for(i in (1:ncol(dfu))[-c(1,6,7,8,9,ncol(dfu))]){
+  dfu[,i] = factor(dfu[,i],levels=sort(as.numeric(as.character(levels(dfu[,i])))))
+}
 
 
 # unordered factors -------------------------------------------------------
 
-dfu = rbind(fb,ig,sc)
 
+dfnum = fact2num(dfu,all=(1:ncol(dfu))[-c(1,6,8,9,ncol(dfu))])
+
+# split into before and after education
+dfub = dfu[dfu$q5.1_digedu == "nej",]
+dfua = dfu[dfu$q5.1_digedu == "ja",]
+
+dfnumb = dfnum[dfnum$q5.1_digedu == "nej",]
+dfnuma = dfnum[dfnum$q5.1_digedu == "ja",]
+
+fb = dfu[dfu$platform=="fb",]
+ig = dfu[dfu$platform=="ig",]
+sc = dfu[dfu$platform=="sc",]
 
 # ordered factors ---------------------------------------------------------
+# 
+# dfo = ordfactordf(dfu,ordered=T)
+# dfo$q3.1_gender = factor(dfo$q3.1_gender,ordered=F)
+# dfo$q5.1_digedu = factor(dfo$q5.1_digedu,ordered=F)
+# dfo$q6.1_school = factor(dfo$q6.1_school,ordered=F)
+# dfo$platform = factor(dfo$platform,ordered=F)
+# dfo.num = fact2num(dfu,all=(1:ncol(dfo))[-c(1,6,8,9,ncol(dfu))])
+# 
+# # split into before and after education
+# dfo.b = dfo[dfo$q5.1_digedu == "nej",]
+# dfo.a = dfo[dfo$q5.1_digedu == "ja",]
+# 
+# fbo = dfo[dfo$platform=="fb",]
+# igo = dfo[dfo$platform=="ig",]
+# sco = dfo[dfo$platform=="sc",]
 
-dfo = ordfactordf(dfu,ordered=T)
-dfo$q3.1_gender = factor(dfo$q3.1_gender,ordered=F)
-dfo$q5.1_digedu = factor(dfo$q5.1_digedu,ordered=F)
-dfo$q6.1_school = factor(dfo$q6.1_school,ordered=F)
-dfo$platform = factor(dfo$platform,ordered=F)
+
 
 
 
 # Verify factor level conversion ------------------------------------------
 
-for(i in 2:ncol(df0.df)){ # dfo and dfu have 1 more column "platform"
-  x = df0.df[,i]
-  y = dfo[,i]
-  t = table(x,y)
-  if(any(apply(t,2,function(x) length(x[x!=0])) > 1)){ # check in dfo, cuz levels are fixed
-    print(table(x,y))
-    cat(print(paste0("Differences in ",names(dfo)[i])))
-    # readline("Next..")
-  } 
-}
+# for(i in 2:ncol(df0.df)){ # dfo and dfu have 1 more column "platform"
+#   x = df0.df[,i]
+#   y = dfo[,i]
+#   t = table(x,y)
+#   if(any(apply(t,2,function(x) length(x[x!=0])) > 1)){ # check in dfo, cuz levels are fixed
+#     print(table(x,y))
+#     cat(print(paste0("Differences in ",names(dfo)[i])))
+#     # readline("Next..")
+#   } 
+# }
 
 # Cool everything is fine
+
+
+
 
