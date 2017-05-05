@@ -13,6 +13,8 @@ source("libraries.R")
 
 source("Rfunctions/Rfunctions.R")
 
+source("functions.R")
+
 source("data_prep.R")
 
 

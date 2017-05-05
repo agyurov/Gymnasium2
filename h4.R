@@ -2,8 +2,12 @@
 
 
 
-# chisq test high p-value = different
+# chisq test high p-value = different [can not reject H0 of independence]
+# chisq test low p-value = [Reject H0 of independence]
+# chisq.test LOW P-Value => dependent
+# fisher.test = chisq.test 
 # t.test high p-value = same mean
+
 
 # H4 ----------------------------------------------------------------------
 # H4a: Frequency between platforms
@@ -29,18 +33,6 @@ t.test(dfnum$q1.1_usefb[dfnum$q5.1_digedu == "ja"], dfnum$q1.2_useig[dfnum$q5.1_
 t.test(dfnum$q1.1_usefb[dfnum$q5.1_digedu == "ja"], dfnum$q1.3_usesc[dfnum$q5.1_digedu == "ja"], paired=T)
 t.test(dfnum$q1.2_useig[dfnum$q5.1_digedu == "ja"], dfnum$q1.3_usesc[dfnum$q5.1_digedu == "ja"], paired=T)
 # All t-tests indicate the same mean value across platform usage
-
-
-# # Chisq.test
-# # Before edu
-# chisq.test(df$q1.1_usefb[df$q5.1_digedu == "nej"], df$q1.2_useig[df$q5.1_digedu == "nej"])
-# chisq.test(df$q1.1_usefb[df$q5.1_digedu == "nej"], df$q1.3_usesc[df$q5.1_digedu == "nej"])
-# chisq.test(df$q1.2_useig[df$q5.1_digedu == "nej"], df$q1.3_usesc[df$q5.1_digedu == "nej"])
-# 
-# # After edu
-# chisq.test(df$q1.1_usefb[df$q5.1_digedu == "ja"], df$q1.2_useig[df$q5.1_digedu == "ja"])
-# chisq.test(df$q1.1_usefb[df$q5.1_digedu == "ja"], df$q1.3_usesc[df$q5.1_digedu == "ja"])
-# chisq.test(df$q1.2_useig[df$q5.1_digedu == "ja"], df$q1.3_usesc[df$q5.1_digedu == "ja"])
 
 
 # H4b: q8.1_freqpost ------------------------------------------------------

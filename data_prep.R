@@ -204,26 +204,42 @@ fb = dfu[dfu$platform=="fb",]
 ig = dfu[dfu$platform=="ig",]
 sc = dfu[dfu$platform=="sc",]
 
+fbb = fb[fb$q5.1_digedu=="nej",]
+igb = ig[ig$q5.1_digedu=="nej",]
+scb = sc[sc$q5.1_digedu=="nej",]
+
+fba = fb[fb$q5.1_digedu=="ja",]
+iga = ig[ig$q5.1_digedu=="ja",]
+sca = sc[sc$q5.1_digedu=="ja",]
+
 # ordered factors ---------------------------------------------------------
 # 
-# dfo = ordfactordf(dfu,ordered=T)
-# dfo$q3.1_gender = factor(dfo$q3.1_gender,ordered=F)
-# dfo$q5.1_digedu = factor(dfo$q5.1_digedu,ordered=F)
-# dfo$q6.1_school = factor(dfo$q6.1_school,ordered=F)
-# dfo$platform = factor(dfo$platform,ordered=F)
-# dfo.num = fact2num(dfu,all=(1:ncol(dfo))[-c(1,6,8,9,ncol(dfu))])
-# 
-# # split into before and after education
-# dfo.b = dfo[dfo$q5.1_digedu == "nej",]
-# dfo.a = dfo[dfo$q5.1_digedu == "ja",]
-# 
-# fbo = dfo[dfo$platform=="fb",]
-# igo = dfo[dfo$platform=="ig",]
-# sco = dfo[dfo$platform=="sc",]
+dfo = ordfactordf(dfu,ordered=T)
+dfo$q3.1_gender = factor(dfo$q3.1_gender,ordered=F)
+dfo$q5.1_digedu = factor(dfo$q5.1_digedu,ordered=F)
+dfo$q6.1_school = factor(dfo$q6.1_school,ordered=F)
+dfo$platform = factor(dfo$platform,ordered=F)
+dfonum = fact2num(dfu,all=(1:ncol(dfo))[-c(1,6,8,9,ncol(dfu))])
 
+# split into before and after education
+dfob = dfo[dfo$q5.1_digedu == "nej",]
+dfoa = dfo[dfo$q5.1_digedu == "ja",]
 
+fbo = dfo[dfo$platform=="fb",]
+igo = dfo[dfo$platform=="ig",]
+sco = dfo[dfo$platform=="sc",]
 
+fbnum = dfonum[dfonum$platform=="fb",]
+ignum = dfonum[dfonum$platform=="ig",]
+scnum = dfonum[dfonum$platform=="sc",]
 
+fbnumb = fbnum[fbnum$q5.1_digedu=="nej",]
+ignumb = ignum[ignum$q5.1_digedu=="nej",]
+scnumb = scnum[scnum$q5.1_digedu=="nej",]
+
+fbnuma = fbnum[fbnum$q5.1_digedu=="ja",]
+ignuma = ignum[ignum$q5.1_digedu=="ja",]
+scnuma = scnum[scnum$q5.1_digedu=="ja",]
 
 # Verify factor level conversion ------------------------------------------
 
