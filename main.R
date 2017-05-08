@@ -17,6 +17,8 @@ source("functions.R")
 
 source("data_prep.R")
 
+source("h5.R") # Binary data prep
+
 
 # record()
 # save.image(paste0(getwd(),"/","all_data.RData"))

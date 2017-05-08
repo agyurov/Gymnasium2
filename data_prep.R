@@ -5,6 +5,10 @@ ig = read.csv(dir()[grepl("instagram",tolower(dir()),fixed=T)],encoding = "UTF-8
 sc = read.csv(dir()[grepl("snapchat",tolower(dir()),fixed=T)],encoding = "UTF-8")
 
 
+# busted ------------------------------------------------------------------
+fb = busted(fb,3,4)
+ig = busted(ig,3,4)
+sc = busted(sc,3,4)
 
 # Column names ------------------------------------------------------------
 
@@ -90,16 +94,17 @@ sc = do.call(cbind.data.frame,lapply(sc,rm.char.factor))
 #
 fb = fill.levels(fb,"q1.")
 fb = fill.levels(fb,"q8.")
-sc = fill.levels(sc,"q1.")
-sc = fill.levels(sc,"q8.")
 ig = fill.levels(ig,"q1.")
 ig = fill.levels(ig,"q8.")
+sc = fill.levels(sc,"q1.")
+sc = fill.levels(sc,"q8.")
+
 
 
 # Manually fix factor levels, grammar mistakes stc ------------------------
 fblev = lapply(fb,levels)
-sclev = lapply(sc,levels)
 iglev = lapply(ig,levels)
+sclev = lapply(sc,levels)
 
 # for(i in 1:length(fblev)){
 #   cat("\014")
@@ -228,6 +233,14 @@ dfoa = dfo[dfo$q5.1_digedu == "ja",]
 fbo = dfo[dfo$platform=="fb",]
 igo = dfo[dfo$platform=="ig",]
 sco = dfo[dfo$platform=="sc",]
+
+fbob = fbo[fbo$q5.1_digedu=="nej",]
+igob = fbo[igo$q5.1_digedu=="nej",]
+scob = fbo[sco$q5.1_digedu=="nej",]
+
+fboa = fbo[fbo$q5.1_digedu=="ja",]
+igoa = fbo[igo$q5.1_digedu=="ja",]
+scoa = fbo[sco$q5.1_digedu=="ja",]
 
 fbnum = dfonum[dfonum$platform=="fb",]
 ignum = dfonum[dfonum$platform=="ig",]

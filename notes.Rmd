@@ -1,0 +1,235 @@
+---
+title: "notes"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,message = FALSE, warning = FALSE)
+source("main.R")
+require(xtable)
+require(knitr)
+```
+
+# Chisq p-values
+
+- Null hypothesis  - independent
+- Alternative hypothesis - they are NOT independent
+
+
+* high p-value = there is no relation
+* low p-value = there is a relation
+
+Common treshold is 0.05 (or 5%) and I suggest you stick with it. So if a p-value is below 5% there is not enough evidence to support the null hypothesis that x and y are independent. You have to accept that x and y are dependent.
+
+If the p-value is above 5% there is not enough evidence to disprove that x and y are independent. You have to accept that they are independent.
+
+## H4
+
+### H4a (table of counts)
+
+The table of frequencies of use of different platforms. Based on the entire, combined, data set [Fb,Ig,Sc].
+
+```{r}
+x = rbind(table(dfo[,2]),table(dfo[,3]),table(dfo[,4]))
+rownames(x) = names(dfo)[2:4]
+kable(x)
+```
+
+### H4b (Chisq p-values)
+
+Chisq tests of the type Platform_use_freq ~ q8.1, q8.2, q8.3. #PlatformSpecific, #BeforeAfter
+
+```{r}
+xfb1 = chisq.test(fbb$q1.1_usefb,fbb$q8.1_freqpost)$p.value
+xfb2 = chisq.test(fbb$q1.1_usefb,fbb$q8.2_freqsend)$p.value
+xfb3 = chisq.test(fbb$q1.1_usefb,fbb$q8.3_freqread)$p.value
+
+yfb1 = chisq.test(fba$q1.1_usefb,fba$q8.1_freqpost)$p.value
+yfb2 = chisq.test(fba$q1.1_usefb,fba$q8.2_freqsend)$p.value
+yfb3 = chisq.test(fba$q1.1_usefb,fba$q8.3_freqread)$p.value
+
+tbl1 = c(xfb1,xfb2,xfb3)
+tbl1 = rbind(tbl1,c(yfb1,yfb2,yfb3))
+colnames(tbl1) = c("q8.1_freqpost","q8.2_freqsend","q8.3_freqread")
+rownames(tbl1) = c("noEdu","Edu")
+kable(tbl1,digits=3,caption="Facebook")
+
+xig1 = chisq.test(igb$q1.2_useig,igb$q8.1_freqpost)$p.value
+xig2 = chisq.test(igb$q1.2_useig,igb$q8.2_freqsend)$p.value
+xig3 = chisq.test(igb$q1.2_useig,igb$q8.3_freqread)$p.value
+
+yig1 = chisq.test(iga$q1.2_useig,iga$q8.1_freqpost)$p.value
+yig2 = chisq.test(iga$q1.2_useig,iga$q8.2_freqsend)$p.value
+yig3 = chisq.test(iga$q1.2_useig,iga$q8.3_freqread)$p.value
+
+tbl2 = c(xig1,xig2,xig3)
+tbl2 = rbind(tbl2,c(yig1,yig2,yig3))
+colnames(tbl2) = c("q8.1_freqpost","q8.2_freqsend","q8.3_freqread")
+rownames(tbl2) = c("noEdu","Edu")
+kable(tbl2,digits=3,caption="Instagram")
+
+xsc1 = chisq.test(scb$q1.3_usesc,scb$q8.1_freqpost)$p.value
+xsc2 = chisq.test(scb$q1.3_usesc,scb$q8.2_freqsend)$p.value
+xsc3 = chisq.test(scb$q1.3_usesc,scb$q8.3_freqread)$p.value
+
+ysc1 = chisq.test(sca$q1.3_usesc,sca$q8.1_freqpost)$p.value
+ysc2 = chisq.test(sca$q1.3_usesc,sca$q8.2_freqsend)$p.value
+ysc3 = chisq.test(sca$q1.3_usesc,sca$q8.3_freqread)$p.value
+
+tbl3 = c(xsc1,xsc2,xsc3)
+tbl3 = rbind(tbl3,c(ysc1,ysc2,ysc3))
+colnames(tbl3) = c("q8.1_freqpost","q8.2_freqsend","q8.3_freqread")
+rownames(tbl3) = c("noEdu","Edu")
+kable(tbl3,digits=3,caption="Snapchat")
+```
+
+---
+
+---
+
+## H5 (Chisq p-values)
+
+Only fb_q9 and ig_q9 are answered correctly with disagreement. The rest of the questions sc_q9, 10, 11 and 12 for the three platforms are answered correctly with agreement.
+
+```{r}
+xfb1 = chisq.test(fbb$q9binary,fbb$q10binary)$p.value
+xfb2 = chisq.test(fbb$q11binary,fbb$q12binary)$p.value
+
+yfb1 = chisq.test(fba$q9binary,fba$q10binary)$p.value
+yfb2 = chisq.test(fba$q11binary,fba$q12binary)$p.value
+
+tbl1 = c(xfb1,xfb2)
+tbl1 = rbind(tbl1,c(yfb1,yfb2))
+colnames(tbl1) = c("q9binary vs q10binary","q11binary vs q12binary")
+rownames(tbl1) = c("noEdu","Edu")
+kable(tbl1,digits=3,caption="Facebook")
+
+xig1 = chisq.test(igb$q9binary,igb$q10binary)$p.value
+xig2 = chisq.test(igb$q11binary,igb$q12binary)$p.value
+
+yig1 = chisq.test(iga$q9binary,iga$q10binary)$p.value
+yig2 = chisq.test(iga$q11binary,iga$q12binary)$p.value
+
+tbl1 = c(xig1,xig2)
+tbl1 = rbind(tbl1,c(yig1,yig2))
+colnames(tbl1) = c("q9binary vs q10binary","q11binary vs q12binary")
+rownames(tbl1) = c("noEdu","Edu")
+kable(tbl1,digits=3,caption="Instagram")
+
+xsc1 = chisq.test(scb$q9binary,scb$q10binary)$p.value
+xsc2 = chisq.test(scb$q11binary,scb$q12binary)$p.value
+
+ysc1 = chisq.test(sca$q9binary,sca$q10binary)$p.value
+ysc2 = chisq.test(sca$q11binary,sca$q12binary)$p.value
+
+tbl1 = c(xsc1,xsc2)
+tbl1 = rbind(tbl1,c(ysc1,ysc2))
+colnames(tbl1) = c("q9binary vs q10binary","q11binary vs q12binary")
+rownames(tbl1) = c("noEdu","Edu")
+kable(tbl1,digits=3,caption="Snapchat")
+
+```
+
+---
+
+---
+
+## H0
+
+## H0a (Chisq p-values)
+
+Caring about privacy settings vs eiditing privacy settings. Taken on the entire, combined, data set [fb,ig,sc]
+
+```{r}
+x = chisq.test(dfub$q2.1_nocare,dfub$q7.1_editedprivacy)$p.value
+y = chisq.test(dfua$q2.1_nocare,dfua$q7.1_editedprivacy)$p.value
+tbl = c("before"=x,"after"=y)
+kable(tbl,digits=3)
+```
+
+### H0b (correlation)
+
+```{r}
+x = cor(dfonum$q2.1_nocare[dfonum$q5.1_digedu=="nej"],dfonum$q7.1_editedprivacy[dfonum$q5.1_digedu=="nej"])
+y = cor(dfonum$q2.1_nocare[dfonum$q5.1_digedu=="ja"],dfonum$q7.1_editedprivacy[dfonum$q5.1_digedu=="ja"])
+tbl = c("before"=round(x,3),"after"=round(y,3))
+kable(tbl,digits=3)
+```
+
+---
+
+---
+
+## HX
+
+### HXa (table of counts)
+
+The row labels in the tables below are as well 1 to 4. Q15 vs Q16
+
+```{r}
+kable(table(fbb$q15.1_trustsell,fbb$q16.1_trustpriv),caption="Facebook before. q15 rows, q16 cols")
+kable(table(fba$q15.1_trustsell,fba$q16.1_trustpriv),caption="Facebook after q15 rows, q16 cols")
+
+kable(table(igb$q15.1_trustsell,igb$q16.1_trustpriv),caption="Instagram before. q15 rows, q16 cols")
+kable(table(iga$q15.1_trustsell,iga$q16.1_trustpriv),caption="Instagram after q15 rows, q16 cols")
+
+kable(table(scb$q15.1_trustsell,scb$q16.1_trustpriv),caption="Snapchat before. q15 rows, q16 cols")
+kable(table(sca$q15.1_trustsell,sca$q16.1_trustpriv),caption="Snapchat after q15 rows, q16 cols")
+```
+
+
+### HXb (Chisq p-values)
+
+Platform specific and before/after q15 vs q17, q18 and q19
+
+```{r}
+# Facebook
+xfb1 = chisq.test(fbb$q15.1_trustsell,fbb$q17.1_targetme)$p.value
+xfb2 = chisq.test(fbb$q15.1_trustsell,fbb$q18.1_targetfr)$p.value
+xfb3 = chisq.test(fbb$q15.1_trustsell,fbb$q19.1_comfortsell)$p.value
+
+yfb1 = chisq.test(fba$q15.1_trustsell,fba$q17.1_targetme)$p.value
+yfb2 = chisq.test(fba$q15.1_trustsell,fba$q18.1_targetfr)$p.value
+yfb3 = chisq.test(fba$q15.1_trustsell,fba$q19.1_comfortsell)$p.value
+
+tbl1 = c(xfb1,xfb2,xfb3)
+tbl1 = rbind(tbl1,c(yfb1,yfb2,yfb3))
+colnames(tbl1) = c("q17.1_targetme","q18.1_targetfr","q19.1_comfortsell")
+rownames(tbl1) = c("noEdu","Edu")
+kable(tbl1,digits=3,caption="Facebook")
+
+# Instagram
+xig1 = chisq.test(igb$q15.1_trustsell,igb$q17.1_targetme)$p.value
+xig2 = chisq.test(igb$q15.1_trustsell,igb$q18.1_targetfr)$p.value
+xig3 = chisq.test(igb$q15.1_trustsell,igb$q19.1_comfortsell)$p.value
+
+yig1 = chisq.test(iga$q15.1_trustsell,iga$q17.1_targetme)$p.value
+yig2 = chisq.test(iga$q15.1_trustsell,iga$q18.1_targetfr)$p.value
+yig3 = chisq.test(iga$q15.1_trustsell,iga$q19.1_comfortsell)$p.value
+
+tbl1 = c(xig1,xig2,xig3)
+tbl1 = rbind(tbl1,c(yig1,yig2,yig3))
+colnames(tbl1) = c("q17.1_targetme","q18.1_targetfr","q19.1_comfortsell")
+rownames(tbl1) = c("noEdu","Edu")
+kable(tbl1,digits=3,caption="Instagram")
+
+# Snapchat
+xsc1 = chisq.test(scb$q15.1_trustsell,scb$q17.1_targetme)$p.value
+xsc2 = chisq.test(scb$q15.1_trustsell,scb$q18.1_targetfr)$p.value
+xsc3 = chisq.test(scb$q15.1_trustsell,scb$q19.1_comfortsell)$p.value
+
+ysc1 = chisq.test(sca$q15.1_trustsell,sca$q17.1_targetme)$p.value
+ysc2 = chisq.test(sca$q15.1_trustsell,sca$q18.1_targetfr)$p.value
+ysc3 = chisq.test(sca$q15.1_trustsell,sca$q19.1_comfortsell)$p.value
+
+tbl1 = c(xsc1,xsc2,xsc3)
+tbl1 = rbind(tbl1,c(ysc1,ysc2,ysc3))
+colnames(tbl1) = c("q17.1_targetme","q18.1_targetfr","q19.1_comfortsell")
+rownames(tbl1) = c("noEdu","Edu")
+kable(tbl1,digits=3,caption="Snapchat")
+```
+
+
