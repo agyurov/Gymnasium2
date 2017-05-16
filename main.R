@@ -7,7 +7,7 @@ wd = getwd()
 # Fix the repos... ITU IT gods
 # install.packages('package', repos='http://cran.us.r-project.org')
 
-data_file = "all_data.RData"
+data_file = ".RData"
 
 source("libraries.R")
 
@@ -17,10 +17,9 @@ source("functions.R")
 
 source("data_prep.R")
 
-source("h5.R") # Binary data prep
+source("H5.R")
 
-
-# record()
+record()
 # save.image(paste0(getwd(),"/","all_data.RData"))
 # save.image(paste0(getwd(),"/bucket.RData"))
 # browseURL(paste('file://', file.path(getwd(),'notes.html'), sep=''))
@@ -28,5 +27,5 @@ source("h5.R") # Binary data prep
 
 
   
-bucket.classes(classes=c("data.frame"))
+# bucket.classes(classes=c("data.frame"))
 # with(.BucketEnv,save.image(paste0(getwd(),"/bucket.RData")))
