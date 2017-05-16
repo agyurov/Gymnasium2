@@ -64,14 +64,14 @@ brief.plot = function(what){
           col = rainbow(2,start=.55,end=0,alpha = .7),
           names.arg = 1:length(unlist(fxb[what])))
 
-  barplot(rbind(unlist(ixb[what]),unlist(ixg[what])),beside=T,main=paste0("FB ",what),
+  barplot(rbind(unlist(ixb[what]),unlist(ixg[what])),beside=T,main=paste0("IG ",what),
           col = rainbow(2,start=.55,end=0,alpha = .3),
           names.arg = 1:length(unlist(fxb[what])))
   barplot(rbind(unlist(iyb[what]),unlist(iyg[what])),beside=T,add=T,
           col = rainbow(2,start=.55,end=0,alpha = .7),
           names.arg = 1:length(unlist(fxb[what])))
   
-  barplot(rbind(unlist(sxb[what]),unlist(sxg[what])),beside=T,main=paste0("FB ",what),
+  barplot(rbind(unlist(sxb[what]),unlist(sxg[what])),beside=T,main=paste0("SC ",what),
           col = rainbow(2,start=.55,end=0,alpha = .3),
           names.arg = 1:length(unlist(fxb[what])))
   barplot(rbind(unlist(syb[what]),unlist(syg[what])),beside=T,add=T,
