@@ -1,14 +1,15 @@
 ---
 title: "notes"
 output:
-  word_document: default
-  pdf_document: default
   html_document: default
+  pdf_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE,message = FALSE, warning = FALSE)
 source("main.R")
+load("all_data.RData")
 require(xtable)
 require(knitr)
 ```
@@ -232,4 +233,176 @@ rownames(tbl1) = c("noEdu","Edu")
 kable(tbl1,digits=3,caption="Snapchat")
 ```
 
+## H6, Q13 vs Q14
 
+
+```{r}
+# Before
+h6b1 = chisq.test(fbb$q13.1_audience,fbb$q14.1_trustconn)$p.value
+h6b2 = chisq.test(igb$q13.1_audience,igb$q14.1_trustconn)$p.value
+h6b3 = chisq.test(scb$q13.1_audience,scb$q14.1_trustconn)$p.value
+
+# After 
+h6a1 = chisq.test(fba$q13.1_audience,fba$q14.1_trustconn)$p.value
+h6a2 = chisq.test(iga$q13.1_audience,iga$q14.1_trustconn)$p.value
+h6a3 = chisq.test(sca$q13.1_audience,sca$q14.1_trustconn)$p.value
+
+tbl = c(fb=h6b1,ig=h6b2,sc=h6b3)
+tbl = rbind(tbl,c(fb=h6a1,ig=h6a2,sc=h6a3))
+rownames(tbl) = c("noEdu","Edu")
+kable(tbl,digits=3)
+```
+
+
+## H1, 10-05-2017, q15 vs q16
+
+# Chisq
+
+```{r}
+x1 = chisq.test(fbb$q15.1_trustsell,fbb$q16.1_trustpriv)$p.value
+x2 = chisq.test(igb$q15.1_trustsell,igb$q16.1_trustpriv)$p.value
+x3 = chisq.test(scb$q15.1_trustsell,scb$q16.1_trustpriv)$p.value
+
+y1 = chisq.test(fba$q15.1_trustsell,fba$q16.1_trustpriv)$p.value
+y2 = chisq.test(iga$q15.1_trustsell,iga$q16.1_trustpriv)$p.value
+y3 = chisq.test(sca$q15.1_trustsell,sca$q16.1_trustpriv)$p.value
+
+tbl = c(x1,x2,x3)
+tbl = rbind(tbl,c(y1,y2,y3))
+colnames(tbl) = c("fb","ig","sc")
+rownames(tbl) = c("noEdu","Edu")
+kable(tbl,digits = 3)
+```
+
+# Correlation
+
+```{r}
+x1 = cor(fbnumb$q15.1_trustsell,fbnumb$q16.1_trustpriv)
+x2 = cor(ignumb$q15.1_trustsell,ignumb$q16.1_trustpriv)
+x3 = cor(scnumb$q15.1_trustsell,scnumb$q16.1_trustpriv)
+
+y1 = cor(fbnuma$q15.1_trustsell,fbnuma$q16.1_trustpriv)
+y2 = cor(ignuma$q15.1_trustsell,ignuma$q16.1_trustpriv)
+y3 = cor(scnuma$q15.1_trustsell,scnuma$q16.1_trustpriv)
+tbl = c(x1,x2,x3)
+tbl = rbind(tbl,c(y1,y2,y3))
+colnames(tbl) = c("fb","ig","sc")
+rownames(tbl) = c("noEdu","Edu")
+kable(tbl,digits = 3)
+```
+
+
+## H2, 10-05-2017, q15 vs q17
+
+# Chisq
+
+```{r}
+x1 = chisq.test(fbb$q15.1_trustsell,fbb$q17.1_targetme)$p.value
+x2 = chisq.test(igb$q15.1_trustsell,igb$q17.1_targetme)$p.value
+x3 = chisq.test(scb$q15.1_trustsell,scb$q17.1_targetme)$p.value
+
+y1 = chisq.test(fba$q15.1_trustsell,fba$q17.1_targetme)$p.value
+y2 = chisq.test(iga$q15.1_trustsell,iga$q17.1_targetme)$p.value
+y3 = chisq.test(sca$q15.1_trustsell,sca$q17.1_targetme)$p.value
+
+tbl = c(x1,x2,x3)
+tbl = rbind(tbl,c(y1,y2,y3))
+colnames(tbl) = c("fb","ig","sc")
+rownames(tbl) = c("noEdu","Edu")
+kable(tbl,digits = 3)
+```
+
+# Correlation
+
+```{r}
+x1 = cor(fbnumb$q15.1_trustsell,fbnumb$q17.1_targetme)
+x2 = cor(ignumb$q15.1_trustsell,ignumb$q17.1_targetme)
+x3 = cor(scnumb$q15.1_trustsell,scnumb$q17.1_targetme)
+
+y1 = cor(fbnuma$q15.1_trustsell,fbnuma$q17.1_targetme)
+y2 = cor(ignuma$q15.1_trustsell,ignuma$q17.1_targetme)
+y3 = cor(scnuma$q15.1_trustsell,scnuma$q17.1_targetme)
+
+tbl = c(x1,x2,x3)
+tbl = rbind(tbl,c(y1,y2,y3))
+colnames(tbl) = c("fb","ig","sc")
+rownames(tbl) = c("noEdu","Edu")
+kable(tbl,digits = 3)
+```
+
+
+## H3, 10-05-2017, q15 vs q18
+
+# Chisq
+
+```{r}
+x1 = chisq.test(fbb$q15.1_trustsell,fbb$q18.1_targetfr)$p.value
+x2 = chisq.test(igb$q15.1_trustsell,igb$q18.1_targetfr)$p.value
+x3 = chisq.test(scb$q15.1_trustsell,scb$q18.1_targetfr)$p.value
+
+y1 = chisq.test(fba$q15.1_trustsell,fba$q18.1_targetfr)$p.value
+y2 = chisq.test(iga$q15.1_trustsell,iga$q18.1_targetfr)$p.value
+y3 = chisq.test(sca$q15.1_trustsell,sca$q18.1_targetfr)$p.value
+
+tbl = c(x1,x2,x3)
+tbl = rbind(tbl,c(y1,y2,y3))
+colnames(tbl) = c("fb","ig","sc")
+rownames(tbl) = c("noEdu","Edu")
+kable(tbl,digits = 3)
+```
+
+# Correlation
+
+```{r}
+x1 = cor(fbnumb$q15.1_trustsell,fbnumb$q18.1_targetfr)
+x2 = cor(ignumb$q15.1_trustsell,ignumb$q18.1_targetfr)
+x3 = cor(scnumb$q15.1_trustsell,scnumb$q18.1_targetfr)
+
+y1 = cor(fbnuma$q15.1_trustsell,fbnuma$q18.1_targetfr)
+y2 = cor(ignuma$q15.1_trustsell,ignuma$q18.1_targetfr)
+y3 = cor(scnuma$q15.1_trustsell,scnuma$q18.1_targetfr)
+
+tbl = c(x1,x2,x3)
+tbl = rbind(tbl,c(y1,y2,y3))
+colnames(tbl) = c("fb","ig","sc")
+rownames(tbl) = c("noEdu","Edu")
+kable(tbl,digits = 3)
+```
+
+## H4, 10-05-2017, q15 vs q19
+
+# Chisq
+
+```{r}
+x1 = chisq.test(fbb$q15.1_trustsell,fbb$q19.1_comfortsell)$p.value
+x2 = chisq.test(igb$q15.1_trustsell,igb$q19.1_comfortsell)$p.value
+x3 = chisq.test(scb$q15.1_trustsell,scb$q19.1_comfortsell)$p.value
+
+y1 = chisq.test(fba$q15.1_trustsell,fba$q19.1_comfortsell)$p.value
+y2 = chisq.test(iga$q15.1_trustsell,iga$q19.1_comfortsell)$p.value
+y3 = chisq.test(sca$q15.1_trustsell,sca$q19.1_comfortsell)$p.value
+
+tbl = c(x1,x2,x3)
+tbl = rbind(tbl,c(y1,y2,y3))
+colnames(tbl) = c("fb","ig","sc")
+rownames(tbl) = c("noEdu","Edu")
+kable(tbl,digits = 3)
+```
+
+# Correlation
+
+```{r}
+x1 = cor(fbnumb$q15.1_trustsell,fbnumb$q19.1_comfortsell)
+x2 = cor(ignumb$q15.1_trustsell,ignumb$q19.1_comfortsell)
+x3 = cor(scnumb$q15.1_trustsell,scnumb$q19.1_comfortsell)
+
+y1 = cor(fbnuma$q15.1_trustsell,fbnuma$q19.1_comfortsell)
+y2 = cor(ignuma$q15.1_trustsell,ignuma$q19.1_comfortsell)
+y3 = cor(scnuma$q15.1_trustsell,scnuma$q19.1_comfortsell)
+
+tbl = c(x1,x2,x3)
+tbl = rbind(tbl,c(y1,y2,y3))
+colnames(tbl) = c("fb","ig","sc")
+rownames(tbl) = c("noEdu","Edu")
+kable(tbl,digits = 3)
+```
