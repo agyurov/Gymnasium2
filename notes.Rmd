@@ -16,6 +16,8 @@ require(knitr)
 
 # Summary
 
+718 girls, 388 boys. Respondents fb 406, ig 192, sc 508. Had dig edu 298, had not eig edu 898.
+
 ```{r}
 fx = lapply(fbb,table)
 fy = lapply(fba,table)
@@ -41,6 +43,14 @@ syg = lapply(sca[sca$q3.1_gender=="kvinde",],table)
 print(str(dfo))
 ```
 
+```{r}
+x = dfo[dfo$q3.1_gender == "mand",]
+y = dfo[dfo$q3.1_gender == "kvinde",]
+par(mfrow=c(1,3))
+barplot(rbind(table(x$q1.1_usefb),table(y$q1.1_usefb)),beside=T,col=rainbow(2,start=.55,end=0,alpha = .3),main="fb")
+barplot(rbind(table(x$q1.2_useig),table(y$q1.2_useig)),beside=T,col=rainbow(2,start=.55,end=0,alpha = .3),main="ig")
+barplot(rbind(table(x$q1.3_usesc),table(y$q1.3_usesc)),beside=T,col=rainbow(2,start=.55,end=0,alpha = .3),main="sc")
+```
 
 ```{r}
 brief.plot.ol = function(what){

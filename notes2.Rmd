@@ -1,0 +1,46 @@
+---
+title: "notes"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,message = FALSE, warning = FALSE,fig.height=2.5)
+source("main.R")
+load(".RData")
+require(xtable)
+require(knitr)
+```
+
+
+# Definitions of platform literacy
+
+\begin{table}
+\centering
+\begin{tabular}[ht!]{c|c|c}
+Q9 & Q10 & \\ \hline
+ T & agree & knows\\ 
+ T &  disagree & critical\\
+ F &  agree & naive\\ 
+ F &  disagree & ignorant\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}
+\centering
+\begin{tabular}[ht!]{c|c|c}
+Q11 & Q12 & \\ \hline
+ agree &  agree & knows\\ 
+ agree &  disagree & naive\\ 
+ disagree &  agree & uninformed?\\ 
+ disagree &  disagree & naive?\\
+ \hline
+\end{tabular}
+\end{table}
+
+```{r}
+
+```

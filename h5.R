@@ -2,11 +2,11 @@
 # Binary data prep for H5
 
 # Binary question 9
-fbb$q9binary = get.binary(fbnumb$q9.1_seecontent,rev=T)
-fba$q9binary = get.binary(fbnuma$q9.1_seecontent,rev=T)
+fbb$q9binary = get.binary(fbnumb$q9.1_seecontent,rev=F)
+fba$q9binary = get.binary(fbnuma$q9.1_seecontent,rev=F)
 
-igb$q9binary = get.binary(ignumb$q9.1_seecontent,rev=T)
-iga$q9binary = get.binary(ignuma$q9.1_seecontent,rev=T)
+igb$q9binary = get.binary(ignumb$q9.1_seecontent,rev=F)
+iga$q9binary = get.binary(ignuma$q9.1_seecontent,rev=F)
 
 scb$q9binary = get.binary(scnumb$q9.1_seecontent,rev=F)
 sca$q9binary = get.binary(scnuma$q9.1_seecontent,rev=F)

@@ -193,10 +193,22 @@ for(i in (1:ncol(dfu))[-c(1,6,7,8,9,ncol(dfu))]){
 }
 
 
-# unordered factors -------------------------------------------------------
+# Invert levels for FB q9 and IG q9 ---------------------------------------
 
+x = dfu$q9.1_seecontent[dfu$platform == "fb" | dfu$platform == "ig"]
+x = invert.level(x)
+dfu$q9.1_seecontent[dfu$platform == "fb" | dfu$platform == "ig"] = x$x
 
-dfnum = fact2num(dfu,all=(1:ncol(dfu))[-c(1,6,8,9,ncol(dfu))])
+# knowledge ---------------------------------------------------------------
+
+dfu$k1_ = factor(paste0(dfu$q9.1_seecontent,dfu$q10.1_understand))
+dfu$k2_ = factor(paste0(dfu$q10.1_understand,dfu$q11.1_seemypost))
+
+# numeric version ---------------------------------------------------------
+
+dfnum = fact2num(dfu,all=c(2,3,4,5,7,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24))
+
+# splitting ---------------------------------------------------------------
 
 # split into before and after education
 dfub = dfu[dfu$q5.1_digedu == "nej",]
@@ -224,7 +236,6 @@ dfo$q3.1_gender = factor(dfo$q3.1_gender,ordered=F)
 dfo$q5.1_digedu = factor(dfo$q5.1_digedu,ordered=F)
 dfo$q6.1_school = factor(dfo$q6.1_school,ordered=F)
 dfo$platform = factor(dfo$platform,ordered=F)
-dfonum = fact2num(dfu,all=(1:ncol(dfo))[-c(1,6,8,9,ncol(dfu))])
 
 # split into before and after education
 dfob = dfo[dfo$q5.1_digedu == "nej",]
@@ -242,9 +253,9 @@ fboa = fbo[fbo$q5.1_digedu=="ja",]
 igoa = fbo[igo$q5.1_digedu=="ja",]
 scoa = fbo[sco$q5.1_digedu=="ja",]
 
-fbnum = dfonum[dfonum$platform=="fb",]
-ignum = dfonum[dfonum$platform=="ig",]
-scnum = dfonum[dfonum$platform=="sc",]
+fbnum = dfnum[dfnum$platform=="fb",]
+ignum = dfnum[dfnum$platform=="ig",]
+scnum = dfnum[dfnum$platform=="sc",]
 
 fbnumb = fbnum[fbnum$q5.1_digedu=="nej",]
 ignumb = ignum[ignum$q5.1_digedu=="nej",]
@@ -268,6 +279,10 @@ scnuma = scnum[scnum$q5.1_digedu=="ja",]
 # }
 
 # Cool everything is fine
+
+demo.dat = dfu[,c("q3.1_gender","q4.1_age","q6.1_school")]
+
+
 
 
 
