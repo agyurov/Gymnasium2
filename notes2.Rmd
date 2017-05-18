@@ -15,32 +15,147 @@ require(knitr)
 ```
 
 
-# Definitions of platform literacy
+# Summary
 
-\begin{table}
-\centering
-\begin{tabular}[ht!]{c|c|c}
-Q9 & Q10 & \\ \hline
- T & agree & knows\\ 
- T &  disagree & critical\\
- F &  agree & naive\\ 
- F &  disagree & ignorant\\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{table}
-\centering
-\begin{tabular}[ht!]{c|c|c}
-Q11 & Q12 & \\ \hline
- agree &  agree & knows\\ 
- agree &  disagree & naive\\ 
- disagree &  agree & uninformed?\\ 
- disagree &  disagree & naive?\\
- \hline
-\end{tabular}
-\end{table}
+718 girls, 388 boys. Respondents fb 406, ig 192, sc 508. Had dig edu 298, had not eig edu 898.
 
 ```{r}
+fx = lapply(fbb,table)
+fy = lapply(fba,table)
+fxb = lapply(fbb[fbb$q3.1_gender=="mand",],table)
+fxg = lapply(fbb[fbb$q3.1_gender=="kvinde",],table)
+fyb = lapply(fba[fba$q3.1_gender=="mand",],table)
+fyg = lapply(fba[fba$q3.1_gender=="kvinde",],table)
 
+ix = lapply(igb,table)
+iy = lapply(iga,table)
+ixb = lapply(igb[igb$q3.1_gender=="mand",],table)
+ixg = lapply(igb[igb$q3.1_gender=="kvinde",],table)
+iyb = lapply(iga[iga$q3.1_gender=="mand",],table)
+iyg = lapply(iga[iga$q3.1_gender=="kvinde",],table)
+
+sx = lapply(scb,table)
+sy = lapply(sca,table)
+sxb = lapply(scb[scb$q3.1_gender=="mand",],table)
+sxg = lapply(scb[scb$q3.1_gender=="kvinde",],table)
+syb = lapply(sca[sca$q3.1_gender=="mand",],table)
+syg = lapply(sca[sca$q3.1_gender=="kvinde",],table)
+
+print(str(dfo))
+```
+
+```{r}
+x = dfo[dfo$q3.1_gender == "mand",]
+y = dfo[dfo$q3.1_gender == "kvinde",]
+par(mfrow=c(1,3))
+barplot(rbind(table(x$q1.1_usefb),table(y$q1.1_usefb)),beside=T,col=rainbow(2,start=.55,end=0,alpha = .3),main="fb")
+barplot(rbind(table(x$q1.2_useig),table(y$q1.2_useig)),beside=T,col=rainbow(2,start=.55,end=0,alpha = .3),main="ig")
+barplot(rbind(table(x$q1.3_usesc),table(y$q1.3_usesc)),beside=T,col=rainbow(2,start=.55,end=0,alpha = .3),main="sc")
+```
+
+```{r}
+brief.plot.ol = function(what){
+  par(mfrow=c(1,3))
+  barplot(unlist(fx[what]),main=paste0("FB ",what))
+  barplot(unlist(fy[what]),add=T)
+
+  barplot(unlist(ix[what]),main=paste0("IG ",what))
+  barplot(unlist(iy[what]),add=T)
+
+  barplot(unlist(sx[what]),main=paste0("SC ",what))
+  barplot(unlist(sy[what]),add=T)
+}
+
+brief.plot = function(what){
+  par(mfrow=c(1,3),mar=c(4,2,4,1))
+  barplot(rbind(unlist(fxb[what]),unlist(fxg[what])),beside=T,main=paste0("FB ",what),
+          col = rainbow(2,start=.55,end=0,alpha = .3),
+          names.arg = 1:length(unlist(fxb[what])))
+  barplot(rbind(unlist(fyb[what]),unlist(fyg[what])),beside=T,add=T,
+          col = rainbow(2,start=.55,end=0,alpha = .7),
+          names.arg = 1:length(unlist(fxb[what])))
+
+  barplot(rbind(unlist(ixb[what]),unlist(ixg[what])),beside=T,main=paste0("IG ",what),
+          col = rainbow(2,start=.55,end=0,alpha = .3),
+          names.arg = 1:length(unlist(fxb[what])))
+  barplot(rbind(unlist(iyb[what]),unlist(iyg[what])),beside=T,add=T,
+          col = rainbow(2,start=.55,end=0,alpha = .7),
+          names.arg = 1:length(unlist(fxb[what])))
+  
+  barplot(rbind(unlist(sxb[what]),unlist(sxg[what])),beside=T,main=paste0("SC ",what),
+          col = rainbow(2,start=.55,end=0,alpha = .3),
+          names.arg = 1:length(unlist(fxb[what])))
+  barplot(rbind(unlist(syb[what]),unlist(syg[what])),beside=T,add=T,
+          col = rainbow(2,start=.55,end=0,alpha = .7),
+          names.arg = 1:length(unlist(fxb[what])))
+}
+```
+
+```{r}
+brief.plot("q2.1_nocare")
+
+```
+
+```{r}
+brief.plot("q6.1_school")
+```
+
+```{r}
+brief.plot("q7.1_editedprivacy")
+```
+
+```{r}
+brief.plot("q8.1_freqpost")
+```
+
+```{r}
+brief.plot("q8.2_freqsend")
+```
+
+```{r}
+brief.plot("q8.3_freqread")
+```
+
+```{r}
+brief.plot("q9.1_seecontent")
+```
+
+```{r}
+brief.plot("q10.1_understand")
+```
+
+```{r}
+brief.plot("q11.1_seemypost")
+```
+
+```{r}
+brief.plot("q12.1_controlseemypost")
+```
+
+```{r}
+brief.plot("q13.1_audience")
+```
+
+```{r}
+brief.plot("q14.1_trustconn")
+```
+
+```{r}
+brief.plot("q15.1_trustsell")
+```
+
+```{r}
+brief.plot("q16.1_trustpriv")
+```
+
+```{r}
+brief.plot("q17.1_targetme")
+```
+
+```{r}
+brief.plot("q18.1_targetfr")
+```
+
+```{r}
+brief.plot("q19.1_comfortsell")
 ```
