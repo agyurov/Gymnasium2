@@ -8,7 +8,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE,message = FALSE, warning = FALSE,fig.height=2.5)
-source("main.R")
+# source("main.R")
 load(".RData")
 require(xtable)
 require(knitr)
@@ -17,7 +17,7 @@ require(knitr)
 
 # Summary
 
-718 girls, 388 boys. Respondents fb 406, ig 192, sc 508. Had dig edu 298, had not eig edu 898.
+718 girls, 388 boys. Respondents fb 406, ig 192, sc 508. Had dig edu 298, had not dig edu 898.
 
 ```{r}
 fx = lapply(fbb,table)
@@ -159,3 +159,113 @@ brief.plot("q18.1_targetfr")
 ```{r}
 brief.plot("q19.1_comfortsell")
 ```
+
+\pagebreak
+
+# Luca's take
+
+## L1. Concern, Q2 ~ Q7
+
+### Q2/Q7 ~ Q7/Q2 + DigEdu + platform
+
+Without interactions Q7 ~ ...
+
+```{r}
+# my.barplot(luca1$resp$beta,namez = names(luca1$resp$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
+kable(sort(luca1$resp$beta, decreasing = T),digits = 2,caption="Coefficients")
+```
+
+With interactions Q7 ~ ...
+
+```{r}
+# my.barplot(luca1o2$resp$beta,namez = names(luca1o2$resp$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
+kable(sort(luca1o2$resp$beta, decreasing = T),digits = 2,caption="Coefficients")
+```
+
+Without interactions Q2 ~ ...
+
+```{r}
+# my.barplot(luca2$resp$beta,namez = names(luca2$resp$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
+kable(sort(luca2$resp$beta, decreasing = T),digits = 2,caption="Coefficients")
+```
+
+With interactions Q2 ~ ...
+
+```{r}
+# my.barplot(luca2o2$resp$beta,namez = names(luca2o2$resp$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
+kable(sort(luca2o2$resp$beta, decreasing = T),digits = 2,caption="Coefficients")
+```
+
+
+### Q2 ~ Q7 + DigEdu + platform + demographic data
+
+Without interactions Q7 ~ ...
+
+```{r}
+luca4
+```
+
+With interactions Q7 ~ ...
+
+```{r}
+# my.barplot(luca4o2$resp$beta,namez = names(luca4o2$resp$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
+kable(sort(luca4o2$resp$beta,decreasing = T),digits = 2,caption="Coefficients")
+```
+
+Without interactions Q2 ~ ...
+
+```{r}
+# my.barplot(luca3$resp$beta,namez = names(luca3$resp$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
+kable(sort(luca3$resp$beta,decreasing = T),digits = 2,caption="Coefficients")
+```
+
+With interactions Q2 ~ ...
+
+```{r}
+# my.barplot(luca3o2$resp$beta,namez = names(luca3o2$resp$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
+kable(luca3o2$resp$beta,digits = 2,caption="Coefficients")
+```
+
+## L2. Knowledge?! 
+
+Knowledge is defined as a factor whose levels are the combinations of the constituent questions (9-10, 11-12). For each pair of the questions 9,10 and 11-12 we create the derivative variables K1 and K2 such that for Q9 response i and Q10 response j the factor value of K1 is ij. K_1, K_2 have 16 elements each (4x4). In addition, based on the questions 9-19 we can build a wide range of derivative variables such as:
+
+* knowledge (ignorance)
+* awareness (naiveness)
+* mindfulness (reckessness) etc
+
+### Q2, Q7 ~ K1/K2 + DigEdu + platform
+
+Without interactions Q2, Q7 ~ K1 + digedu + platform
+
+```{r}
+mluca1$q2.1_nocare$beta
+kable(sort(mluca1$q7.1_editedprivacy$beta,decreasing = T),digits = 2,caption = "Q7 Coefficients")
+```
+
+With interactions Q2, Q7 ~ K1 + digedu + platform
+
+```{r}
+cat("q2.1_nocare constant model\n")
+cat("q7.1_editedprivacy convergence issue...\n")
+```
+
+Without interactions Q2, Q7 ~ K2 + digedu + platform
+
+```{r}
+cat("q2.1_nocare constant model\n")
+kable(sort(mluca2$q7.1_editedprivacy$beta, decreasing = T),digits = 2,caption = "Q7 Coefficients")
+```
+
+With interactions Q2, Q7 ~ K2 + digedu + platform
+
+```{r}
+cat("q2.1_nocare constant model\n")
+kable(sort(mluca2o2$q7.1_editedprivacy$beta,decreasing = T),digits = 2,caption = "Q7 Coefficients")
+```
+
+### Q2, Q7 ~ K1/K2 + DigEdu + platform + demographic data
+
+Without interactions Q2, Q7 ~ K1/K2 + digedu + platform + demo.dat
+
+Nothing here at all

@@ -46,6 +46,7 @@ names(fb) = names(ig) = names(sc) = eng_names
 # Original data -----------------------------------------------------------
 
 df0.list = list(fb0 = fb, ig0 = ig, sc0 = sc)
+original.data = do.call(rbind.data.frame,df0.list)
 
 
 
@@ -198,11 +199,17 @@ for(i in (1:ncol(dfu))[-c(1,6,7,8,9,ncol(dfu))]){
 x = dfu$q9.1_seecontent[dfu$platform == "fb" | dfu$platform == "ig"]
 x = invert.level(x)
 dfu$q9.1_seecontent[dfu$platform == "fb" | dfu$platform == "ig"] = x$x
+which(dfu$q6.1_school == "")
+dfu = dfu[-which(dfu$q6.1_school == ""),]
 
 # knowledge ---------------------------------------------------------------
 
 dfu$k1_ = factor(paste0(dfu$q9.1_seecontent,dfu$q10.1_understand))
-dfu$k2_ = factor(paste0(dfu$q10.1_understand,dfu$q11.1_seemypost))
+dfu$k2_ = factor(paste0(dfu$q11.1_seemypost,dfu$q12.1_controlseemypost))
+dfu$k3_ = factor(paste0(dfu$q9.1_seecontent,dfu$q11.1_seemypost))
+dfu$k4_ = factor(paste0(dfu$q9.1_seecontent,dfu$q12.1_controlseemypost))
+dfu$k5_ = factor(paste0(dfu$q10.1_understand,dfu$q11.1_seemypost))
+dfu$k6_ = factor(paste0(dfu$q10.1_understand,dfu$q12.1_controlseemypost))
 
 # numeric version ---------------------------------------------------------
 

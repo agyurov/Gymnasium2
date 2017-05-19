@@ -8,7 +8,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE,message = FALSE, warning = FALSE,fig.height=2.5)
-source("main.R")
+# source("main.R")
 load(".RData")
 require(xtable)
 require(knitr)
@@ -238,53 +238,6 @@ kable(tbl3,digits=3,caption="Snapchat")
 
 ---
 
-## H5 (Chisq p-values)
-
-Only fb_q9 and ig_q9 are answered correctly with disagreement. The rest of the questions sc_q9, 10, 11 and 12 for the three platforms are answered correctly with agreement.
-
-```{r}
-xfb1 = chisq.test(fbb$q9binary,fbb$q10binary)$p.value
-xfb2 = chisq.test(fbb$q11binary,fbb$q12binary)$p.value
-
-yfb1 = chisq.test(fba$q9binary,fba$q10binary)$p.value
-yfb2 = chisq.test(fba$q11binary,fba$q12binary)$p.value
-
-tbl1 = c(xfb1,xfb2)
-tbl1 = rbind(tbl1,c(yfb1,yfb2))
-colnames(tbl1) = c("q9binary vs q10binary","q11binary vs q12binary")
-rownames(tbl1) = c("noEdu","Edu")
-kable(tbl1,digits=3,caption="Facebook")
-
-xig1 = chisq.test(igb$q9binary,igb$q10binary)$p.value
-xig2 = chisq.test(igb$q11binary,igb$q12binary)$p.value
-
-yig1 = chisq.test(iga$q9binary,iga$q10binary)$p.value
-yig2 = chisq.test(iga$q11binary,iga$q12binary)$p.value
-
-tbl1 = c(xig1,xig2)
-tbl1 = rbind(tbl1,c(yig1,yig2))
-colnames(tbl1) = c("q9binary vs q10binary","q11binary vs q12binary")
-rownames(tbl1) = c("noEdu","Edu")
-kable(tbl1,digits=3,caption="Instagram")
-
-xsc1 = chisq.test(scb$q9binary,scb$q10binary)$p.value
-xsc2 = chisq.test(scb$q11binary,scb$q12binary)$p.value
-
-ysc1 = chisq.test(sca$q9binary,sca$q10binary)$p.value
-ysc2 = chisq.test(sca$q11binary,sca$q12binary)$p.value
-
-tbl1 = c(xsc1,xsc2)
-tbl1 = rbind(tbl1,c(ysc1,ysc2))
-colnames(tbl1) = c("q9binary vs q10binary","q11binary vs q12binary")
-rownames(tbl1) = c("noEdu","Edu")
-kable(tbl1,digits=3,caption="Snapchat")
-
-```
-
----
-
----
-
 ## H0
 
 ## H0a (Chisq p-values)
@@ -301,8 +254,8 @@ kable(tbl,digits=3)
 ### H0b (correlation)
 
 ```{r}
-x = cor(dfonum$q2.1_nocare[dfonum$q5.1_digedu=="nej"],dfonum$q7.1_editedprivacy[dfonum$q5.1_digedu=="nej"])
-y = cor(dfonum$q2.1_nocare[dfonum$q5.1_digedu=="ja"],dfonum$q7.1_editedprivacy[dfonum$q5.1_digedu=="ja"])
+x = cor(dfnum$q2.1_nocare[dfnum$q5.1_digedu=="nej"],dfnum$q7.1_editedprivacy[dfnum$q5.1_digedu=="nej"])
+y = cor(dfnum$q2.1_nocare[dfnum$q5.1_digedu=="ja"],dfnum$q7.1_editedprivacy[dfnum$q5.1_digedu=="ja"])
 tbl = c("before"=round(x,3),"after"=round(y,3))
 kable(tbl,digits=3)
 ```
