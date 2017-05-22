@@ -108,16 +108,13 @@ lapply(mluca13o2,summary) # onlywa for q7
 
 # Set of models -----------------------------------------------------------
 
-mnames = paste0("mluca",1:13,c("","o2"))
+mnames = paste0("mluca",c(1,2,4,6,7,8,9,10,11,12,13),c("","o2"))
 
 # remove named lists
 m.list = lapply(mnames,function(x) eval(parse(text=x)))
-mnames = mnames[-which(lapply(m.list,length)== 0)]
-m.list = m.list[-which(lapply(m.list,length)== 0)]
 m.list = break.list(m.list)
-
-
-
+lapply(m.list,function(x) as.character(x$formula)[2])
+names(m.list) = unlist(lapply(m.list,function(x) as.character(x$formula)[2]))
 
 # Chisq.tests for the knowledge measures ----------------------------------
 

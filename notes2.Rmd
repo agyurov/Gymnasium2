@@ -232,7 +232,7 @@ Knowledge is defined as a factor whose levels are the combinations of the consti
 
 * knowledge (ignorance)
 * awareness (naiveness)
-* mindfulness (reckessness) etc
+* mindfulness (recklessness) etc
 
 Below are tested the following 6 knowledge definitions:
 

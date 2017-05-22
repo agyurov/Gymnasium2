@@ -203,7 +203,7 @@ which(dfu$q6.1_school == "")
 dfu = dfu[-which(dfu$q6.1_school == ""),]
 
 # knowledge ---------------------------------------------------------------
-
+  
 dfu$k1_ = factor(paste0(dfu$q9.1_seecontent,dfu$q10.1_understand))
 dfu$k2_ = factor(paste0(dfu$q11.1_seemypost,dfu$q12.1_controlseemypost))
 dfu$k3_ = factor(paste0(dfu$q9.1_seecontent,dfu$q11.1_seemypost))
