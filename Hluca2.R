@@ -104,3 +104,40 @@ lapply(mluca13,summary) # only for q7
 mluca13o2 = model.listZ2(pred = hluca.dat2k6.demo, resp = dfu[,c("q2.1_nocare","q7.1_editedprivacy")],exclude.warnings = F)
 lapply(mluca13o2,summary) # onlywa for q7
 
+
+
+# Set of models -----------------------------------------------------------
+
+mnames = paste0("mluca",1:13,c("","o2"))
+
+# remove named lists
+m.list = lapply(mnames,function(x) eval(parse(text=x)))
+mnames = mnames[-which(lapply(m.list,length)== 0)]
+m.list = m.list[-which(lapply(m.list,length)== 0)]
+m.list = break.list(m.list)
+
+
+
+
+# Chisq.tests for the knowledge measures ----------------------------------
+
+chisq.test(dfu$k1_,dfu$k2_)
+chisq.test(dfu$k1_,dfu$k3_)
+chisq.test(dfu$k1_,dfu$k4_)
+chisq.test(dfu$k1_,dfu$k5_)
+chisq.test(dfu$k1_,dfu$k6_)
+
+chisq.test(dfu$k2_,dfu$k3_)
+chisq.test(dfu$k2_,dfu$k4_)
+chisq.test(dfu$k2_,dfu$k5_)
+chisq.test(dfu$k2_,dfu$k6_)
+
+chisq.test(dfu$k3_,dfu$k4_)
+chisq.test(dfu$k3_,dfu$k5_)
+chisq.test(dfu$k3_,dfu$k6_)
+
+chisq.test(dfu$k4_,dfu$k5_)
+chisq.test(dfu$k4_,dfu$k6_)
+
+chisq.test(dfu$k5_,dfu$k6_)
+

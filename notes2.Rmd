@@ -234,6 +234,18 @@ Knowledge is defined as a factor whose levels are the combinations of the consti
 * awareness (naiveness)
 * mindfulness (reckessness) etc
 
+Below are tested the following 6 knowledge definitions:
+
+* k1 = q9 & q10
+* k2 = q11 & q 10
+* k3 = q9 & q11
+* k4 = q9 & q12
+* k5 = q10 & q11
+* k6 = q10 & q12
+
+Below are shown only the models for k1 and k2. The remaining knowledge definitions are tested in the same way but are not reported. Out of all tested models only knowledge definition k2 appears significant. Models with interactions are computationally costly and often do not converge correctly. They require manual inspection.
+
+
 ### Q2, Q7 ~ K1/K2 + DigEdu + platform
 
 Without interactions Q2, Q7 ~ K1 + digedu + platform
