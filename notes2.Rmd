@@ -14,9 +14,14 @@ load(".RData")
 ```
 
 
+
 # Summary
 
 718 girls, 388 boys. Respondents FB 406, IG 192, SC 508. Had digital education 298, did not have digital education 898. Q9 FB and IG have been inverted. All factor levels are of the form $1...n$ with 1 been disagreement and $n$ agreement. The Shinyapp needs a small fix to ensure better distribution of users between the three different surveys.
+
+\pagebreak
+
+# The data
 
 ```{r}
 fx = lapply(fbb,table)

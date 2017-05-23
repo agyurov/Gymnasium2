@@ -148,10 +148,6 @@ chisq.test(dfu$k5_,dfu$k6_)
 # my print method for clm -------------------------------------------------
 
 notes.clm = function(x){
-  cat("Reduced:\n")
-  print.noquote(x$formula)
-  cat("\n")
-  cat("Coefficients:\n")
   kable(sort(x$beta, decreasing = T),digits = 2,caption="Coefficients")
 }
 
