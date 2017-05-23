@@ -16,7 +16,7 @@ my.barplot(luca1o2[[1]]$beta,namez = names(luca1o2$resp$beta),col=grey.colors(2,
 luca2 = model.listZ(pred = hluca.dat2, resp = dfu["q2.1_nocare"])
 summary(luca2[[1]])
 my.barplot(luca2[[1]]$beta,namez = names(luca2$resp$beta),col=rainbow(2,s=.3,v=.5,alpha = .7))
-luca2o2 = model.listZ2(pred = hluca.dat2, resp = dfu["q2.1_nocare"])
+luca2o2 = model.listZ2(pred = hluca.dat2, resp = dfu["q2.1_nocare"],trace=1)
 summary(luca2o2[[1]])
 my.barplot(luca2o2[[1]]$beta,namez = names(luca2o2$resp$beta),col=3:4)
 
@@ -40,3 +40,17 @@ summary(luca4o2[[1]])
 my.barplot(luca4o2[[1]]$beta,namez = names(luca4o2$resp$beta),col=3:4)
 
 
+# Set of models -----------------------------------------------------------
+
+mnames = paste0("luca",1:4,c("","o2"))
+# remove named lists
+mlist1 = lapply(mnames,function(x) eval(parse(text=x)))
+mnames = rep(mnames,unlist(lapply(mlist1,length)))
+mlist1 = break.list(mlist1)
+names(mlist1) = mnames
+lapply(mlist1,function(x) as.character(x$formula)[2])
+names(mlist1) = paste0(names(mlist1)," ",unlist(lapply(mlist1,function(x) as.character(x$formula)[2])))
+mlist1[lapply(mlist1,function(x) x$convergence$code) > 1] = NULL
+lapply(mlist1,summary)
+lapply(mlist1,function(x)x$beta)
+lapply(mlist1,function(x) x$convergence$code)

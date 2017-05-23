@@ -1,23 +1,22 @@
 ---
 title: "notes"
 output:
-  pdf_document: default
-  html_document: default
-  word_document: default
+  pdf_document:
+    toc: yes
+    toc_depth: 3
+    number_sections: yes
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE,message = FALSE, warning = FALSE,fig.height=2.5)
-# source("main.R")
+source("libraries.R")
 load(".RData")
-require(xtable)
-require(knitr)
 ```
 
 
 # Summary
 
-718 girls, 388 boys. Respondents fb 406, ig 192, sc 508. Had dig edu 298, had not dig edu 898.
+718 girls, 388 boys. Respondents FB 406, IG 192, SC 508. Had digital education 298, did not have digital education 898. Q9 FB and IG have been inverted. All factor levels are of the form $1...n$ with 1 been disagreement and $n$ agreement. The Shinyapp needs a small fix to ensure better distribution of users between the three different surveys.
 
 ```{r}
 fx = lapply(fbb,table)
@@ -41,7 +40,7 @@ sxg = lapply(scb[scb$q3.1_gender=="kvinde",],table)
 syb = lapply(sca[sca$q3.1_gender=="mand",],table)
 syg = lapply(sca[sca$q3.1_gender=="kvinde",],table)
 
-print(str(dfo))
+print(str(dfu))
 ```
 
 ```{r}
@@ -162,71 +161,50 @@ brief.plot("q19.1_comfortsell")
 
 \pagebreak
 
-# Luca's take
 
-## L1. Concern, Q2 ~ Q7
+# L1. Concern, Q2 ~ Q7
 
-### Q2/Q7 ~ Q7/Q2 + DigEdu + platform
+Models with * did not converge properly. All models can potentially be improved significantly.
 
-Without interactions Q7 ~ ...
+## Without demographic data
 
-```{r}
-# my.barplot(luca1$resp$beta,namez = names(luca1$resp$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
-kable(sort(luca1$resp$beta, decreasing = T),digits = 2,caption="Coefficients")
+### Without interactions: Q7 ~ Q2 + digEdu + platform
+
+```{r,results="asis"}
+# my.barplot(luca1[[1]]$beta,namez = names(luca1[[1]]$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
+# kable(sort(luca1[[1]]$beta, decreasing = T),digits = 2,caption="Coefficients")
+notes.clm(luca1$q7.1_editedprivacy)
 ```
 
-With interactions Q7 ~ ...
+### With interactions: Q1 ~ (Q7 + DigEdu + platform)^2
 
-```{r}
-# my.barplot(luca1o2$resp$beta,namez = names(luca1o2$resp$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
-kable(sort(luca1o2$resp$beta, decreasing = T),digits = 2,caption="Coefficients")
+```{r,results="asis"}
+# my.barplot(luca1o2[[1]]$beta,namez = names(luca1o2[[1]]$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
+# kable(sort(luca1o2[[1]]$beta, decreasing = T),digits = 2,caption="Coefficients")
+notes.clm(luca2o2$q2.1_nocare)
 ```
 
-Without interactions Q2 ~ ...
+## With demographic data
 
-```{r}
-# my.barplot(luca2$resp$beta,namez = names(luca2$resp$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
-kable(sort(luca2$resp$beta, decreasing = T),digits = 2,caption="Coefficients")
+### Without interactions: Q2 ~ Q7 + DigEdu + paltform + demo.dat
+
+```{r,results="asis"}
+# my.barplot(luca2[[1]]$beta,namez = names(luca2[[1]]$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
+# kable(sort(luca2[[1]]$beta, decreasing = T),digits = 2,caption="Coefficients")
+notes.clm(luca3$q2.1_nocare)
 ```
 
-With interactions Q2 ~ ...
+### With interactions: Q7 ~ (Q1 + DigEdu + paltform + demo.dat)^2
 
-```{r}
-# my.barplot(luca2o2$resp$beta,namez = names(luca2o2$resp$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
-kable(sort(luca2o2$resp$beta, decreasing = T),digits = 2,caption="Coefficients")
+```{r,results="asis"}
+# my.barplot(luca2o2[[1]]$beta,namez = names(luca2o2[[1]]$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
+# kable(sort(luca2o2[[1]]$beta, decreasing = T),digits = 2,caption="Coefficients")
+notes.clm(luca4o2$q7.1_editedprivacy)
 ```
 
 
-### Q2 ~ Q7 + DigEdu + platform + demographic data
 
-Without interactions Q7 ~ ...
-
-```{r}
-luca4
-```
-
-With interactions Q7 ~ ...
-
-```{r}
-# my.barplot(luca4o2$resp$beta,namez = names(luca4o2$resp$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
-kable(sort(luca4o2$resp$beta,decreasing = T),digits = 2,caption="Coefficients")
-```
-
-Without interactions Q2 ~ ...
-
-```{r}
-# my.barplot(luca3$resp$beta,namez = names(luca3$resp$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
-kable(sort(luca3$resp$beta,decreasing = T),digits = 2,caption="Coefficients")
-```
-
-With interactions Q2 ~ ...
-
-```{r}
-# my.barplot(luca3o2$resp$beta,namez = names(luca3o2$resp$beta),col=grey.colors(2,start=0,end=.4,alpha = .5))
-kable(luca3o2$resp$beta,digits = 2,caption="Coefficients")
-```
-
-## L2. Knowledge?! 
+# L2. Knowledge?! 
 
 Knowledge is defined as a factor whose levels are the combinations of the constituent questions (9-10, 11-12). For each pair of the questions 9,10 and 11-12 we create the derivative variables K1 and K2 such that for Q9 response i and Q10 response j the factor value of K1 is ij. K_1, K_2 have 16 elements each (4x4). In addition, based on the questions 9-19 we can build a wide range of derivative variables such as:
 
@@ -243,41 +221,101 @@ Below are tested the following 6 knowledge definitions:
 * k5 = q10 & q11
 * k6 = q10 & q12
 
-Below are shown only the models for k1 and k2. The remaining knowledge definitions are tested in the same way but are not reported. Out of all tested models only knowledge definition k2 appears significant. Models with interactions are computationally costly and often do not converge correctly. They require manual inspection.
 
+## Models for K1 and K2
 
-### Q2, Q7 ~ K1/K2 + DigEdu + platform
+### Without interactions: Q2, Q7 ~ K1 + digedu + platform
 
-Without interactions Q2, Q7 ~ K1 + digedu + platform
-
-```{r}
-mluca1$q2.1_nocare$beta
-kable(sort(mluca1$q7.1_editedprivacy$beta,decreasing = T),digits = 2,caption = "Q7 Coefficients")
+```{r,results="asis"}
+# mluca1$q2.1_nocare$beta
+# kable(sort(mluca1$q7.1_editedprivacy$beta,decreasing = T),digits = 2,caption = "Q7 Coefficients")
+# lapply(mluca1,notes.clm)
+# lapply(mluca1,notes.clm)
+notes.clm(mluca1$q2.1_nocare)
+notes.clm(mluca1$q7.1_editedprivacy)
 ```
 
-With interactions Q2, Q7 ~ K1 + digedu + platform
+### With interactions: Q2, Q7 ~ (K2 + digedu + platform)^2
 
-```{r}
-cat("q2.1_nocare constant model\n")
-cat("q7.1_editedprivacy convergence issue...\n")
+```{r,results="asis"}
+# cat("q2.1_nocare constant model\n")
+# kable(sort(mluca2o2$q7.1_editedprivacy$beta,decreasing = T),digits = 2,caption = "Q7 Coefficients")
+# lapply(mluca2o2,notes.clm)
+notes.clm(mluca2o2$q2.1_nocare)
+notes.clm(mluca2o2$q7.1_editedprivacy)
 ```
 
-Without interactions Q2, Q7 ~ K2 + digedu + platform
+### Without interactions: Q2_, Q7_ ~ K1 + digedu + platform + demo.dat
 
-```{r}
-cat("q2.1_nocare constant model\n")
-kable(sort(mluca2$q7.1_editedprivacy$beta, decreasing = T),digits = 2,caption = "Q7 Coefficients")
+```{r,results="asis"}
+notes.clm(mluca4$q2.1_nocare)
+notes.clm(mluca4$q7.1_editedprivacy)
 ```
 
-With interactions Q2, Q7 ~ K2 + digedu + platform
+## Models for K3 and K4
 
-```{r}
-cat("q2.1_nocare constant model\n")
-kable(sort(mluca2o2$q7.1_editedprivacy$beta,decreasing = T),digits = 2,caption = "Q7 Coefficients")
+### With interactions: Q2, Q7 ~ (K3 + digedu + platform)^2
+
+```{r,results="asis"}
+# lapply(mluca6o2,notes.clm)
+notes.clm(mluca6o2$q2.1_nocare)
+notes.clm(mluca6o2$q7.1_editedprivacy)
 ```
 
-### Q2, Q7 ~ K1/K2 + DigEdu + platform + demographic data
+### Without interactions: Q2, Q7 ~ K4 + digedu + paltform
 
-Without interactions Q2, Q7 ~ K1/K2 + digedu + platform + demo.dat
+```{r,results="asis"}
+# lapply(mluca7,notes.clm)
+notes.clm(mluca7$q2.1_nocare)
+notes.clm(mluca7$q7.1_editedprivacy)
+```
 
-Nothing here at all
+### With interactions: Q2_, Q7_ ~ (K3 + digedu + platform + demo.dat)^2
+
+```{r,results="asis"}
+# lapply(mluca8o2,notes.clm)
+notes.clm(mluca8o2$q2.1_nocare)
+notes.clm(mluca8o2$q7.1_editedprivacy)
+```
+
+### Without interactions: Q2_, Q7_ ~ K4 + digedu + platform + demo.dat
+
+```{r,results="asis"}
+# lapply(mluca9,notes.clm)
+notes.clm(mluca9$q2.1_nocare)
+notes.clm(mluca9$q7.1_editedprivacy)
+```
+
+## Models for K5 and K6
+
+### With interactions: Q2, Q7 ~ (K5 + digedu + platform)^2
+
+```{r,results="asis"}
+# lapply(mluca10o2,notes.clm)
+notes.clm(mluca10o2$q2.1_nocare)
+notes.clm(mluca10o2$q7.1_editedprivacy)
+```
+
+### Without interactions: Q2, Q7 ~ K6 + digedu + platform
+
+```{r,results="asis"}
+# lapply(mluca11,notes.clm)
+notes.clm(mluca11$q2.1_nocare)
+notes.clm(mluca11$q7.1_editedprivacy)
+```
+
+### With interactions: Q2_, Q7_ ~ (K5 + digedu + platform + demo.dat)^2
+
+```{r,results="asis"}
+# lapply(mluca12o2,notes.clm)
+notes.clm(mluca12o2$q2.1_nocare)
+notes.clm(mluca12o2$q7.1_editedprivacy)
+```
+
+### Without interactions: Q2_, Q7_ ~ K6 + digedu + platform + demo.dat
+
+```{r,results="asis"}
+# lapply(mluca13,notes.clm)
+notes.clm(mluca13$q2.1_nocare)
+notes.clm(mluca13$q7.1_editedprivacy)
+```
