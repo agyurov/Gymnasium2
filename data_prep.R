@@ -202,6 +202,15 @@ dfu$q9.1_seecontent[dfu$platform == "fb" | dfu$platform == "ig"] = x$x
 which(dfu$q6.1_school == "")
 dfu = dfu[-which(dfu$q6.1_school == ""),]
 
+
+# Remove weird schools ----------------------------------------------------
+
+dfu = dfu[-which(dfu$q6.1_school == "knord"),]
+levels(dfu$q6.1_school)
+table(dfu$q6.1_school)
+dfu$q6.1_school = factor(dfu$q6.1_school,levels=levels(dfu$q6.1_school)[-which(levels(dfu$q6.1_school) == "knord")])
+dfu$q6.1_school = factor(dfu$q6.1_school,levels=levels(dfu$q6.1_school)[1:13])
+
 # knowledge ---------------------------------------------------------------
   
 dfu$k1_ = factor(paste0(dfu$q9.1_seecontent,dfu$q10.1_understand))
