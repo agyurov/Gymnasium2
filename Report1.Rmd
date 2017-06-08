@@ -183,7 +183,7 @@ colnames(oddz) = rep(" ",nrow(new.dfu))
 new.dfu = cbind(new.dfu,oddz) 
 ```
 
-Predicted probabilities:
+Predicted probabilities and odds ratios:
   
 ```{r}
 kable(new.dfu,digits=2,caption="Predicted probabilities & odds ratios")
@@ -205,7 +205,7 @@ colnames(oddz) = rep(" ",nrow(new.dfu))
 new.dfu = cbind(new.dfu,oddz) 
 ```
 
-Predicted probabilities:
+Predicted probabilities and odds ratios:
   
 ```{r}
 kable(new.dfu,digits=2,caption="Predicted probabilities of success (1)")
@@ -229,7 +229,7 @@ colnames(oddz) = rep(" ",nrow(new.dfu))
 new.dfu = cbind(new.dfu,oddz) 
 ```
 
-Predicted probabilities:
+Predicted probabilities and odds ratios:
   
 ```{r}
 kable(new.dfu,digits=2,caption="Predicted probabilities of success (1)")
