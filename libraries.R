@@ -5,3 +5,9 @@ library(lubridate)
 library(ordinal)
 require(xtable)
 require(knitr)
+library(psych)
+library(mlogit)
+library(nnet)
+library(MASS)
+
+

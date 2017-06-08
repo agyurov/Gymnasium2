@@ -2,6 +2,9 @@
 title: "Untitled"
 output:
   beamer_presentation: default
+  # toc: yes
+  #   toc_depth: 3
+  #   number_sections: yes
   ioslides_presentation: default
 ---
 

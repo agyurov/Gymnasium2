@@ -300,6 +300,19 @@ demo.dat = dfu[,c("q3.1_gender","q4.1_age","q6.1_school")]
 
 
 
+# Binaries ----------------------------------------------------------------
 
+dfu$bin_care = as.character(dfu$q2.1_nocare)
+dfu$bin_care[dfu$bin_care == 1 | dfu$bin_care  == 2] = "disagree"
+dfu$bin_care[dfu$bin_care == 3 | dfu$bin_care  == 4] = "agree"
+dfu$bin_care[dfu$bin_care == "disagree"] = 0
+dfu$bin_care[dfu$bin_care == "agree"] = 1
+dfu$bin_care = as.factor(dfu$bin_care)
 
+dfu$bin_edit = as.character(dfu$q7.1_editedprivacy)
+dfu$bin_edit[dfu$bin_edit == 1 | dfu$bin_edit  == 2] = "disagree"
+dfu$bin_edit[dfu$bin_edit == 3 | dfu$bin_edit  == 4] = "agree"
+dfu$bin_edit[dfu$bin_edit == "disagree"] = 0
+dfu$bin_edit[dfu$bin_edit == "agree"] = 1
+dfu$bin_edit = as.factor(dfu$bin_edit)
 

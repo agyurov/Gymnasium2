@@ -1,0 +1,280 @@
+---
+title: "Report 1"
+header-includes:
+   - \usepackage{pdfpages}
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: 3
+    number_sections: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,message = FALSE, warning = FALSE,fig.height=2.5)
+source("libraries.R")
+library("knitr")
+load(".RData")
+```
+
+\includepdf{Questions.pdf}
+
+# Summary
+
+All factor levels abbreviated wih 1...n should be read as "strongly disagree" ... "strongly agree".
+
+```{r}
+tbl1 = table(dfu[,c("q3.1_gender","q5.1_digedu")])
+tbl1 = rbind(tbl1,colSums(tbl1))
+tbl1 = cbind(tbl1,rowSums(tbl1))
+tbl1 = cbind(tbl1,tbl1[,1]/tbl1[,3])
+rownames(tbl1)[3] = "total"
+colnames(tbl1)[3:4] = c("total","percentage")
+kable(tbl1,digits=2,caption="Digital education and gender")
+```
+
+```{r}
+tbl2 = table(dfu[,c("q3.1_gender","q2.1_nocare")])
+tbl2 = rbind(tbl2,colSums(tbl2))
+tbl2 = cbind(tbl2,rowSums(tbl2))
+tbl2 = cbind(tbl2,tbl2[,1:4]/tbl2[,5])
+rownames(tbl2)[3] = "total"
+colnames(tbl2)[5] = "total"
+colnames(tbl2)[6:9] = paste0(1:4,"%")
+kable(tbl2,digits=2,caption="NotCaring (q2) and gender")
+```
+
+```{r}
+tbl3 = table(dfu[,c("q3.1_gender","bin_care")])
+tbl3 = rbind(tbl3,colSums(tbl3))
+tbl3 = cbind(tbl3,rowSums(tbl3))
+tbl3 = cbind(tbl3,tbl3[,1]/tbl3[,3])
+rownames(tbl3)[3] = "total"
+colnames(tbl3)[3] = "total"
+colnames(tbl3)[4] = "% agreeing"
+kable(tbl3,digits=2,caption="BinaryNotCaring (q2) and gender")
+```
+
+```{r}
+tbl4 = table(dfu[,c("platform","q2.1_nocare")])
+tbl4 = rbind(tbl4,colSums(tbl4))
+tbl4 = cbind(tbl4,rowSums(tbl4))
+tbl4 = cbind(tbl4,tbl4[,1:4]/tbl4[,5])
+rownames(tbl4)[4] = "total"
+colnames(tbl4)[5] = "total"
+colnames(tbl4)[6:9] = paste0(1:4,"%")
+kable(tbl4,digits=2,caption="Platform and NotCaring (q2)")
+```
+
+```{r}
+tbl5 = table(dfu[,c("platform","bin_care")])
+tbl5 = rbind(tbl5,colSums(tbl5))
+tbl5 = cbind(tbl5,rowSums(tbl5))
+tbl5 = cbind(tbl5,tbl5[,1]/tbl5[,3])
+rownames(tbl5)[4] = "total"
+colnames(tbl5)[3] = "total"
+colnames(tbl5)[4] = "% agreeing"
+kable(tbl5,digits=2,caption="Platform and BinaryNotCaring (q2)")
+```
+
+```{r}
+tbl6 = table(dfu[,c("q3.1_gender","platform")])
+tbl6 = rbind(tbl6,colSums(tbl6))
+tbl6 = cbind(tbl6,rowSums(tbl6))
+tbl6 = cbind(tbl6,tbl6[,1:3]/tbl6[,4])
+rownames(tbl6)[3] = "total"
+colnames(tbl6)[4] = "total"
+colnames(tbl6)[5:7] = paste0(1:3,"%")
+kable(tbl6,digits=2,caption="Platform and gender")
+```
+
+# Histograms, means and st. deviations
+
+Abbreviations:
+
+\begin{itemize}
+\item F - females
+\item M - males
+\item B - not having had digital education ("before")
+\item A - having had digital education ("after")
+\end{itemize}
+
+The less saturated colors represent the participants which have not had digital education and v.v.
+
+```{r}
+fx = lapply(fbb,table)
+fy = lapply(fba,table)
+fxb = lapply(fbb[fbb$q3.1_gender=="mand",],table)
+fxg = lapply(fbb[fbb$q3.1_gender=="kvinde",],table)
+fyb = lapply(fba[fba$q3.1_gender=="mand",],table)
+fyg = lapply(fba[fba$q3.1_gender=="kvinde",],table)
+
+ix = lapply(igb,table)
+iy = lapply(iga,table)
+ixb = lapply(igb[igb$q3.1_gender=="mand",],table)
+ixg = lapply(igb[igb$q3.1_gender=="kvinde",],table)
+iyb = lapply(iga[iga$q3.1_gender=="mand",],table)
+iyg = lapply(iga[iga$q3.1_gender=="kvinde",],table)
+
+sx = lapply(scb,table)
+sy = lapply(sca,table)
+sxb = lapply(scb[scb$q3.1_gender=="mand",],table)
+sxg = lapply(scb[scb$q3.1_gender=="kvinde",],table)
+syb = lapply(sca[sca$q3.1_gender=="mand",],table)
+syg = lapply(sca[sca$q3.1_gender=="kvinde",],table)
+```
+
+
+```{r,results='asis'}
+for(i in names(dfnum)[sapply(dfnum,is.numeric)]){
+  if(i == "q4.1_age") next # jump over age
+  brief.plot(i)
+  brief.table(i,caption=i)
+  if(i > 3){
+    brief.table.platform(i,caption=paste0(i, " per platform"))
+  }
+}
+```
+
+# PCA, FA and Chronbach's Alpha
+
+Below are shown the Principal components, the unique variance, several factors and reduction according to Chronbach's alpha.
+
+## Questions 9-12
+
+```{r}
+what = dfnum[,c("q9.1_seecontent","q10.1_understand","q11.1_seemypost","q12.1_controlseemypost")]
+brief.pca(what,caption = "Questions 9-12")
+```
+
+## Questions 15-19
+
+```{r}
+what = dfnum[,c("q15.1_trustsell","q16.1_trustpriv","q17.1_targetme","q18.1_targetfr","q19.1_comfortsell")]
+brief.pca(what,factors=2,caption = "Questions 15-19")
+```
+
+## Questions 9-12, 15-19
+
+```{r}
+what = dfnum[,c("q9.1_seecontent","q10.1_understand","q11.1_seemypost","q12.1_controlseemypost",
+                "q15.1_trustsell","q16.1_trustpriv","q17.1_targetme","q18.1_targetfr","q19.1_comfortsell")]
+brief.pca(what,factors=3,check.keys=T,caption = "Questions 9-12, 15-19")
+```
+
+# Models
+
+## Binary Q7 ~ Q2 + gender + digital + education 
+
+Reading binary Q2 - 0s corresponds to disagreement (actually caring) and 1s correspond to agreement (not caring).
+
+### W/o interactions
+
+```{r}
+m1 = glm(bin_edit ~ bin_care + q3.1_gender + q5.1_digedu,data=dfu,family = binomial(link = "logit"))
+m1 = step(m1,test="Chisq",trace=0)
+kable(summary(m1)$coefficients,digits=2,caption="Plain logit, without interactions")
+new.dfu = expand.grid(bin_care=levels(dfu$bin_care),q3.1_gender=levels(dfu$q3.1_gender))
+new.dfu$pred_prob = predict(m1,new.dfu,type="response")
+oddz = outer(new.dfu$pred_prob,new.dfu$pred_prob,'/')
+oddz = round(oddz,2)
+diag(oddz) = ""
+oddz[lower.tri(oddz)] = ""
+colnames(oddz) = rep(" ",nrow(new.dfu))
+new.dfu = cbind(new.dfu,oddz) 
+```
+
+Predicted probabilities:
+  
+```{r}
+kable(new.dfu,digits=2,caption="Predicted probabilities & odds ratios")
+```
+
+### With interactions
+
+```{r}
+m1 = glm(bin_edit ~ (-1 + bin_care + q3.1_gender + q5.1_digedu)^2,data=dfu,family = binomial(link = "logit"))
+m1 = step(m1,test="Chisq",trace=0)
+kable(summary(m1)$coefficients,digits=2,caption="With interactions...")
+new.dfu = expand.grid(bin_care=levels(dfu$bin_care),q3.1_gender=levels(dfu$q3.1_gender))
+new.dfu$pred_prob = predict(m1,new.dfu,type="response")
+oddz = outer(new.dfu$pred_prob,new.dfu$pred_prob,'/')
+oddz = round(oddz,2)
+diag(oddz) = ""
+oddz[lower.tri(oddz)] = ""
+colnames(oddz) = rep(" ",nrow(new.dfu))
+new.dfu = cbind(new.dfu,oddz) 
+```
+
+Predicted probabilities:
+  
+```{r}
+kable(new.dfu,digits=2,caption="Predicted probabilities of success (1)")
+```
+
+## Original Q7 ~ Q2 + gender + digital + education
+
+### W/o interactions
+
+```{r}
+m2 = glm(q7.1_editedprivacy ~ q2.1_nocare + q3.1_gender + q5.1_digedu,data=dfu,family = binomial(link = "logit"))
+m2 = step(m2,test="Chisq",trace=0)
+kable(summary(m2)$coefficients,digits=2,caption="Plain logit, without interactions")
+new.dfu = expand.grid(q2.1_nocare=levels(dfu$q2.1_nocare),q3.1_gender=levels(dfu$q3.1_gender))
+new.dfu$pred_prob = predict(m2,new.dfu,type="response")
+oddz = outer(new.dfu$pred_prob,new.dfu$pred_prob,'/')
+oddz = round(oddz,2)
+diag(oddz) = ""
+oddz[lower.tri(oddz)] = ""
+colnames(oddz) = rep(" ",nrow(new.dfu))
+new.dfu = cbind(new.dfu,oddz) 
+```
+
+Predicted probabilities:
+  
+```{r}
+kable(new.dfu,digits=2,caption="Predicted probabilities of success (1)")
+```
+
+### With interactions
+
+\newpage
+
+```{r}
+m2 = glm(q7.1_editedprivacy ~ (q2.1_nocare + q3.1_gender + q5.1_digedu)^2,data=dfu,family = binomial(link = "logit"))
+m2 = step(m2,test="Chisq",trace=0)
+kable(summary(m2)$coefficients,digits=2,caption="With interactions...")
+new.dfu = expand.grid(q2.1_nocare=levels(dfu$q2.1_nocare),q3.1_gender=levels(dfu$q3.1_gender),
+                      q5.1_digedu=levels(dfu$q5.1_digedu))
+new.dfu$pred_prob = predict(m2,new.dfu,type="response")
+
+# FANCY ODDZ
+# function to display only some stuff...
+f = function(x,coef,by=4){
+  # x row
+  # coef
+  sq = seq(x,length(coef),by=by)
+  return(oddz = outer(coef[sq],coef[sq],'/')[1,])
+}
+
+oddz = lapply(1:16,f,coef=new.dfu$pred_prob)
+fkme = function(x){
+  while(length(x) < 4){
+    x = c(NA,x)
+  }
+  return(x)
+}
+oddz = lapply(oddz,fkme)
+oddz = do.call(rbind,oddz)
+oddz = round(oddz,2)
+oddz[is.na(oddz)] = ""
+colnames(oddz) = rep(" ",ncol(oddz))
+
+# FANCY ODDZ END
+new.dfu = cbind(new.dfu,oddz) 
+```
+
+Predicted probabilities and odds ratios. The ratios below are a fraction of all the possible odds. More precisely, the ratios presented are for the same value of caring, ie. Row 1 vs Row 5 (Row_i vs Row_{i + 4})
+  
+```{r}
+kable(new.dfu,digits=2,caption="Predicted probabilities of success (1)")
+```
