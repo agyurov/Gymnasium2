@@ -160,8 +160,8 @@ brief.table.platform = function(what,digits=2,...){
            sd(dfnuma[[what]][dfnuma$q3.1_gender=="mand" & dfnuma$platform == "sc"]))
   #
   tbl = rbind(mnfb,sdfb,mnig,sdig,mnsc,sdsc)
-  nmzz = expand.grid(c("Mean ","St. dev. "),c("FB","IG","SC"))
-  rownames(tbl) = paste0(nmzz[,1],nmzz[,2])
+  nmzz = expand.grid(c("FB ","IG ","SC "),c("Mean","St. dev."))
+  rownames(tbl) = sort(paste0(nmzz[,1],nmzz[,2]))
   colnames(tbl) = c("All","All NoEdu","All Edu","All F",
                     "All M","All F NoEdu","All M NoEdu","All F Edu","All M Edu")
   # return(tbl)
@@ -185,3 +185,21 @@ brief.pca = function(what,factors=1,digits=2,caption="",...){
 }
 
 
+goodness = function(x,null=F){
+  dv = summary(x)
+  df = summary(x)$df.residual
+  cat("Accept for >5%\n")
+  if(null){
+    return(1-pchisq(dv$null.deviance,length(x$y)-1))
+  }
+  if(!null){
+    return(1-pchisq(dv$deviance,df))
+  }
+}
+
+glm.pred = function(x,tresh=.5){
+  pr = predict(x,type="response")
+  pr[pr<tresh] = 0
+  pr[pr>tresh] = 1
+  return(table(true=x$y,pred=pr))
+}

@@ -9,5 +9,5 @@ library(psych)
 library(mlogit)
 library(nnet)
 library(MASS)
-
+library(class)
 

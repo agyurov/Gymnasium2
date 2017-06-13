@@ -20,7 +20,9 @@ load(".RData")
 
 # Summary
 
-All factor levels abbreviated wih 1...n should be read as "strongly disagree" ... "strongly agree".
+All factor levels abbreviated wih 1...n should be read as "strongly disagree" ... "strongly agree". Removed 77 respondents which were assigned to surveys about platforms they dont use as indicated in Q1 use_platform. Removed 28 respondents which had no score above "4" (A few times per week) on questions 8.
+
+Correlation between q2_nocare and q7_edit is -0.39 for those without digital education and -0.49 for those with digital education. Naive clustering (k-means) with 2 and 4 clusters did not show any relation to survey questions which is yet another indication that if any relations exist they are liekly to be conditional.
 
 ```{r}
 tbl1 = table(dfu[,c("q3.1_gender","q5.1_digedu")])
@@ -216,11 +218,11 @@ kable(new.dfu,digits=2,caption="Predicted probabilities of success (1)")
 ### W/o interactions
 
 ```{r}
-m2 = glm(q7.1_editedprivacy ~ q2.1_nocare + q3.1_gender + q5.1_digedu,data=dfu,family = binomial(link = "logit"))
+m2 = clm(q7.1_editedprivacy ~ q2.1_nocare + q3.1_gender + q5.1_digedu,data=dfu,ink = "logit")
 m2 = step(m2,test="Chisq",trace=0)
 kable(summary(m2)$coefficients,digits=2,caption="Plain logit, without interactions")
 new.dfu = expand.grid(q2.1_nocare=levels(dfu$q2.1_nocare),q3.1_gender=levels(dfu$q3.1_gender))
-new.dfu$pred_prob = predict(m2,new.dfu,type="response")
+new.dfu$pred_prob = predict(m2,new.dfu)
 oddz = outer(new.dfu$pred_prob,new.dfu$pred_prob,'/')
 oddz = round(oddz,2)
 diag(oddz) = ""
@@ -235,17 +237,17 @@ Predicted probabilities and odds ratios:
 kable(new.dfu,digits=2,caption="Predicted probabilities of success (1)")
 ```
 
-### With interactions
-
 \newpage
 
+### With interactions
+
 ```{r}
-m2 = glm(q7.1_editedprivacy ~ (q2.1_nocare + q3.1_gender + q5.1_digedu)^2,data=dfu,family = binomial(link = "logit"))
+m2 = clm(q7.1_editedprivacy ~ (q2.1_nocare + q3.1_gender + q5.1_digedu)^2,data=dfu,link = "cauchit")
 m2 = step(m2,test="Chisq",trace=0)
 kable(summary(m2)$coefficients,digits=2,caption="With interactions...")
 new.dfu = expand.grid(q2.1_nocare=levels(dfu$q2.1_nocare),q3.1_gender=levels(dfu$q3.1_gender),
                       q5.1_digedu=levels(dfu$q5.1_digedu))
-new.dfu$pred_prob = predict(m2,new.dfu,type="response")
+new.dfu$pred_prob = predict(m2,newdata=new.dfu)
 
 # FANCY ODDZ
 # function to display only some stuff...

@@ -211,19 +211,63 @@ table(dfu$q6.1_school)
 dfu$q6.1_school = factor(dfu$q6.1_school,levels=levels(dfu$q6.1_school)[-which(levels(dfu$q6.1_school) == "knord")])
 dfu$q6.1_school = factor(dfu$q6.1_school,levels=levels(dfu$q6.1_school)[1:13])
 
+# Identify wrongly placed respondents -------------------------------------
+
+misplaced = list()
+misplaced$fb1 = which(fb$q1.1_usefb == 1)
+misplaced$fb2 = which(fb$q1.1_usefb == 2)
+
+misplaced$ig1 = which(ig$q1.2_useig == 1)
+misplaced$ig2 = which(ig$q1.2_useig == 2)
+
+misplaced$sc1 = which(sc$q1.3_usesc == 1)
+misplaced$sc2 = which(sc$q1.3_usesc == 2)
+
+misplaced = do.call(c,misplaced)
+dfu = dfu[-misplaced,]
+
+
+
+# Binaries ----------------------------------------------------------------
+
+dfu$bin_care = as.character(dfu$q2.1_nocare)
+dfu$bin_care[dfu$bin_care == 1 | dfu$bin_care  == 2] = "disagree"
+dfu$bin_care[dfu$bin_care == 3 | dfu$bin_care  == 4] = "agree"
+dfu$bin_care[dfu$bin_care == "disagree"] = 0
+dfu$bin_care[dfu$bin_care == "agree"] = 1
+dfu$bin_care = as.factor(dfu$bin_care)
+
+dfu$bin_edit = as.character(dfu$q7.1_editedprivacy)
+dfu$bin_edit[dfu$bin_edit == 1 | dfu$bin_edit  == 2] = "disagree"
+dfu$bin_edit[dfu$bin_edit == 3 | dfu$bin_edit  == 4] = "agree"
+dfu$bin_edit[dfu$bin_edit == "disagree"] = 0
+dfu$bin_edit[dfu$bin_edit == "agree"] = 1
+dfu$bin_edit = as.factor(dfu$bin_edit)
+
+
 # knowledge ---------------------------------------------------------------
   
-dfu$k1_ = factor(paste0(dfu$q9.1_seecontent,dfu$q10.1_understand))
-dfu$k2_ = factor(paste0(dfu$q11.1_seemypost,dfu$q12.1_controlseemypost))
-dfu$k3_ = factor(paste0(dfu$q9.1_seecontent,dfu$q11.1_seemypost))
-dfu$k4_ = factor(paste0(dfu$q9.1_seecontent,dfu$q12.1_controlseemypost))
-dfu$k5_ = factor(paste0(dfu$q10.1_understand,dfu$q11.1_seemypost))
-dfu$k6_ = factor(paste0(dfu$q10.1_understand,dfu$q12.1_controlseemypost))
+# dfu$k1_ = factor(paste0(dfu$q9.1_seecontent,dfu$q10.1_understand))
+# dfu$k2_ = factor(paste0(dfu$q11.1_seemypost,dfu$q12.1_controlseemypost))
+# dfu$k3_ = factor(paste0(dfu$q9.1_seecontent,dfu$q11.1_seemypost))
+# dfu$k4_ = factor(paste0(dfu$q9.1_seecontent,dfu$q12.1_controlseemypost))
+# dfu$k5_ = factor(paste0(dfu$q10.1_understand,dfu$q11.1_seemypost))
+# dfu$k6_ = factor(paste0(dfu$q10.1_understand,dfu$q12.1_controlseemypost))
 
 # numeric version ---------------------------------------------------------
 
 dfnum = fact2num(dfu,all=c(2,3,4,5,7,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24))
 
+
+# Identify infrequent users -----------------------------------------------
+
+x = dfnum[,grepl("q8.",names(dfnum),fixed=T)]
+table(apply(x,1,function(x) sum(x>4)))
+which(apply(x,1,function(x) sum(x>4))==0)
+
+dfu = dfu[-which(apply(x,1,function(x) sum(x>4))==0),]
+dfnum = dfnum[-which(apply(x,1,function(x) sum(x>4))==0),]
+  
 # splitting ---------------------------------------------------------------
 
 # split into before and after education
@@ -300,19 +344,4 @@ demo.dat = dfu[,c("q3.1_gender","q4.1_age","q6.1_school")]
 
 
 
-# Binaries ----------------------------------------------------------------
-
-dfu$bin_care = as.character(dfu$q2.1_nocare)
-dfu$bin_care[dfu$bin_care == 1 | dfu$bin_care  == 2] = "disagree"
-dfu$bin_care[dfu$bin_care == 3 | dfu$bin_care  == 4] = "agree"
-dfu$bin_care[dfu$bin_care == "disagree"] = 0
-dfu$bin_care[dfu$bin_care == "agree"] = 1
-dfu$bin_care = as.factor(dfu$bin_care)
-
-dfu$bin_edit = as.character(dfu$q7.1_editedprivacy)
-dfu$bin_edit[dfu$bin_edit == 1 | dfu$bin_edit  == 2] = "disagree"
-dfu$bin_edit[dfu$bin_edit == 3 | dfu$bin_edit  == 4] = "agree"
-dfu$bin_edit[dfu$bin_edit == "disagree"] = 0
-dfu$bin_edit[dfu$bin_edit == "agree"] = 1
-dfu$bin_edit = as.factor(dfu$bin_edit)
 
