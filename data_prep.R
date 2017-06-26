@@ -48,7 +48,14 @@ names(fb) = names(ig) = names(sc) = eng_names
 df0.list = list(fb0 = fb, ig0 = ig, sc0 = sc)
 original.data = do.call(rbind.data.frame,df0.list)
 
+tmp = original.data$time
+tmp = as.character(tmp)
+tmp = gsub(" EET","",tmp)
+tmp = gsub(" ","_",tmp)
 
+# "2017/04/18_7:57:05_am_EET"
+tmp = strptime(tmp,"%Y/%m/%d_%I:%M:%S_%p",tz="")
+thetime = tmp
 
 # Question numbers --------------------------------------------------------
 
@@ -63,8 +70,9 @@ final_names = paste0(full_q_num,"_",eng_names)
 names(fb) = final_names
 names(ig) = final_names
 names(sc) = final_names
-
-
+fbhour = as.numeric(hour(fb$q0.1_time))
+ighour = as.numeric(hour(ig$q0.1_time))
+schour = as.numeric(hour(sc$q0.1_time))
 
 
 # Fix variable classes ----------------------------------------------------
@@ -199,13 +207,15 @@ for(i in (1:ncol(dfu))[-c(1,6,7,8,9,ncol(dfu))]){
 x = dfu$q9.1_seecontent[dfu$platform == "fb" | dfu$platform == "ig"]
 x = invert.level(x)
 dfu$q9.1_seecontent[dfu$platform == "fb" | dfu$platform == "ig"] = x$x
-which(dfu$q6.1_school == "")
-dfu = dfu[-which(dfu$q6.1_school == ""),]
+tmp = which(dfu$q6.1_school == "")
+dfu = dfu[-tmp,]
+thetime = thetime[-tmp]
 
 
 # Remove weird schools ----------------------------------------------------
-
-dfu = dfu[-which(dfu$q6.1_school == "knord"),]
+tmp = which(dfu$q6.1_school == "knord")
+dfu = dfu[-tmp,]
+thetime = thetime[-tmp]
 levels(dfu$q6.1_school)
 table(dfu$q6.1_school)
 dfu$q6.1_school = factor(dfu$q6.1_school,levels=levels(dfu$q6.1_school)[-which(levels(dfu$q6.1_school) == "knord")])
@@ -225,6 +235,7 @@ misplaced$sc2 = which(sc$q1.3_usesc == 2)
 
 misplaced = do.call(c,misplaced)
 dfu = dfu[-misplaced,]
+thetime = thetime[-misplaced]
 
 
 
@@ -267,6 +278,7 @@ which(apply(x,1,function(x) sum(x>4))==0)
 
 dfu = dfu[-which(apply(x,1,function(x) sum(x>4))==0),]
 dfnum = dfnum[-which(apply(x,1,function(x) sum(x>4))==0),]
+thetime = thetime[-which(apply(x,1,function(x) sum(x>4))==0)]
   
 # splitting ---------------------------------------------------------------
 
@@ -345,3 +357,5 @@ demo.dat = dfu[,c("q3.1_gender","q4.1_age","q6.1_school")]
 
 
 
+dfu$hour = hour(thetime)
+dfu$day = weekdays(thetime)

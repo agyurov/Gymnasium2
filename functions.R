@@ -184,22 +184,22 @@ brief.pca = function(what,factors=1,digits=2,caption="",...){
   kable(tbl,digits=digits,caption=caption,...)
 }
 
-
-goodness = function(x,null=F){
+goodness = function(x){
   dv = summary(x)
   df = summary(x)$df.residual
-  cat("Accept for >5%\n")
-  if(null){
-    return(1-pchisq(dv$null.deviance,length(x$y)-1))
-  }
-  if(!null){
-    return(1-pchisq(dv$deviance,df))
-  }
+  null = round(1-pchisq(dv$deviance,df),digits=2)
+  full = round(1-pchisq(dv$null.deviance,length(x$y)-1),digits=2)
+  cat("Accept for > 5% \n")
+  cat(paste0("Null: ", null,"\n"))
+  cat(paste0("Full: ", full,"\n"))
+  return(invisible(list(null = null, full = full)))
 }
 
 glm.pred = function(x,tresh=.5){
   pr = predict(x,type="response")
   pr[pr<tresh] = 0
   pr[pr>tresh] = 1
-  return(table(true=x$y,pred=pr))
+  fk = expand.grid(x$xlevels)
+  fk = cbind.data.frame(fk,prob=round(predict(x,newdata = fk,type="response"),2))
+  return(list(tbl=table(true=x$y,pred=pr), oddz = fk))
 }

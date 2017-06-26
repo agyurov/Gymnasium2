@@ -163,120 +163,20 @@ what = dfnum[,c("q9.1_seecontent","q10.1_understand","q11.1_seemypost","q12.1_co
 brief.pca(what,factors=3,check.keys=T,caption = "Questions 9-12, 15-19")
 ```
 
-# Models
-
-## Binary Q7 ~ Q2 + gender + digital + education 
-
-Reading binary Q2 - 0s corresponds to disagreement (actually caring) and 1s correspond to agreement (not caring).
-
-### W/o interactions
-
-```{r}
-m1 = glm(bin_edit ~ bin_care + q3.1_gender + q5.1_digedu,data=dfu,family = binomial(link = "logit"))
-m1 = step(m1,test="Chisq",trace=0)
-kable(summary(m1)$coefficients,digits=2,caption="Plain logit, without interactions")
-new.dfu = expand.grid(bin_care=levels(dfu$bin_care),q3.1_gender=levels(dfu$q3.1_gender))
-new.dfu$pred_prob = predict(m1,new.dfu,type="response")
-oddz = outer(new.dfu$pred_prob,new.dfu$pred_prob,'/')
-oddz = round(oddz,2)
-diag(oddz) = ""
-oddz[lower.tri(oddz)] = ""
-colnames(oddz) = rep(" ",nrow(new.dfu))
-new.dfu = cbind(new.dfu,oddz) 
-```
-
-Predicted probabilities and odds ratios:
-  
-```{r}
-kable(new.dfu,digits=2,caption="Predicted probabilities & odds ratios")
-```
-
-### With interactions
-
-```{r}
-m1 = glm(bin_edit ~ (-1 + bin_care + q3.1_gender + q5.1_digedu)^2,data=dfu,family = binomial(link = "logit"))
-m1 = step(m1,test="Chisq",trace=0)
-kable(summary(m1)$coefficients,digits=2,caption="With interactions...")
-new.dfu = expand.grid(bin_care=levels(dfu$bin_care),q3.1_gender=levels(dfu$q3.1_gender))
-new.dfu$pred_prob = predict(m1,new.dfu,type="response")
-oddz = outer(new.dfu$pred_prob,new.dfu$pred_prob,'/')
-oddz = round(oddz,2)
-diag(oddz) = ""
-oddz[lower.tri(oddz)] = ""
-colnames(oddz) = rep(" ",nrow(new.dfu))
-new.dfu = cbind(new.dfu,oddz) 
-```
-
-Predicted probabilities and odds ratios:
-  
-```{r}
-kable(new.dfu,digits=2,caption="Predicted probabilities of success (1)")
-```
-
-## Original Q7 ~ Q2 + gender + digital + education
-
-### W/o interactions
-
-```{r}
-m2 = clm(q7.1_editedprivacy ~ q2.1_nocare + q3.1_gender + q5.1_digedu,data=dfu,ink = "logit")
-m2 = step(m2,test="Chisq",trace=0)
-kable(summary(m2)$coefficients,digits=2,caption="Plain logit, without interactions")
-new.dfu = expand.grid(q2.1_nocare=levels(dfu$q2.1_nocare),q3.1_gender=levels(dfu$q3.1_gender))
-new.dfu$pred_prob = predict(m2,new.dfu)
-oddz = outer(new.dfu$pred_prob,new.dfu$pred_prob,'/')
-oddz = round(oddz,2)
-diag(oddz) = ""
-oddz[lower.tri(oddz)] = ""
-colnames(oddz) = rep(" ",nrow(new.dfu))
-new.dfu = cbind(new.dfu,oddz) 
-```
-
-Predicted probabilities and odds ratios:
-  
-```{r}
-kable(new.dfu,digits=2,caption="Predicted probabilities of success (1)")
-```
-
 \newpage
 
-### With interactions
+# Models
+
+With regards to modeling Q7 (I have edited my prvicay settings) there is a particular challange in that there are very few unique observations for which Q7 is 1 or 2. In other words, of all the possible combinations of Q2 (I don't care), gender and platform, only 1 combination, present only once in the data set, is unique for the values of Q7 == 1 and only one combination, present only once in the data set, is unique for Q7 == 2. 
+
 
 ```{r}
-m2 = clm(q7.1_editedprivacy ~ (q2.1_nocare + q3.1_gender + q5.1_digedu)^2,data=dfu,link = "cauchit")
-m2 = step(m2,test="Chisq",trace=0)
-kable(summary(m2)$coefficients,digits=2,caption="With interactions...")
-new.dfu = expand.grid(q2.1_nocare=levels(dfu$q2.1_nocare),q3.1_gender=levels(dfu$q3.1_gender),
-                      q5.1_digedu=levels(dfu$q5.1_digedu))
-new.dfu$pred_prob = predict(m2,newdata=new.dfu)
-
-# FANCY ODDZ
-# function to display only some stuff...
-f = function(x,coef,by=4){
-  # x row
-  # coef
-  sq = seq(x,length(coef),by=by)
-  return(oddz = outer(coef[sq],coef[sq],'/')[1,])
-}
-
-oddz = lapply(1:16,f,coef=new.dfu$pred_prob)
-fkme = function(x){
-  while(length(x) < 4){
-    x = c(NA,x)
-  }
-  return(x)
-}
-oddz = lapply(oddz,fkme)
-oddz = do.call(rbind,oddz)
-oddz = round(oddz,2)
-oddz[is.na(oddz)] = ""
-colnames(oddz) = rep(" ",ncol(oddz))
-
-# FANCY ODDZ END
-new.dfu = cbind(new.dfu,oddz) 
+kable(a1[!apply(A1,1,any),],caption="Unique observations for Q7 = 1")
+kable(a2[!apply(A2,1,any),],caption="Unique observations for Q7 = 2")
 ```
 
-Predicted probabilities and odds ratios. The ratios below are a fraction of all the possible odds. More precisely, the ratios presented are for the same value of caring, ie. Row 1 vs Row 5 (Row_i vs Row_{i + 4})
-  
+For the binary version of Q7 (with 0 meaning disagreement and 1 agreement) there are three unique combinations with a total of 5 observations. 
+
 ```{r}
-kable(new.dfu,digits=2,caption="Predicted probabilities of success (1)")
+kable(b1[!b12,],caption="Unique observations for binary Q7 = 0")
 ```
