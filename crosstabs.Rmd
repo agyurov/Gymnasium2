@@ -50,58 +50,60 @@ cnej = c[tmp$q5.1_digedu == "nej"]
 
 # Definitions
 
-* A - q10 understand (perceived knowledge) with unique values
+* PK (perceived knowledge) - q10 understand  with unique values
 
 `r sort(unique(a))`
 
-* B - "mean" of q15 trustsell and q16 trustpriv (trust) with unique values
+* TR (trust) - "mean" of q15 trustsell and q16 trustpriv  with unique values
 
 `r sort(unique(b))`
 
 Note that $\mu(1,3) = \mu(3,1) = \mu(2,2)$ etc..s 
 
-* C - "mean" of q17 targetme, q18 targetfr and q19 comfortsell (acceptance of commerical practices) with unique values
+* ACP (acceptance of commerical practices) - "mean" of q17 targetme, q18 targetfr and q19 comfortsell  with unique values
 
 `r sort(unique(c))`
+
+* Large $\chi^2$ p-values indicate independence.
 
 
 
 # Facebook
 
-## Unconditioned A x B x C
+## Unconditional A x B x C
 
 ```{r}
-kable(table(a,b),row.names = T,caption = paste0("A x B, p-value: ",round(chisq.test(table(a,b))$p.value,2)))
-kable(table(a,c),row.names = T,caption = paste0("A x C, p-value: ",round(chisq.test(table(a,c))$p.value,2)))
-kable(table(b,c),row.names = T,caption = paste0("B x C, p-value: ",round(chisq.test(table(b,c))$p.value,2)))
+kable(table(a,b),row.names = T,caption = paste0("PK x TR, $\\chi^2$ p-value: ",round(chisq.test(table(a,b))$p.value,2)))
+kable(table(a,c),row.names = T,caption = paste0("PK x ACP, $\\chi^2$ p-value: ",round(chisq.test(table(a,c))$p.value,2)))
+kable(table(b,c),row.names = T,caption = paste0("TR x ACP, $\\chi^2$ p-value: ",round(chisq.test(table(b,c))$p.value,2)))
 ```
 
 ## Conditioned on gender
 
 ```{r}
-kable(table(af,bf),row.names = T,caption = paste0("A female x B female, p-value: ",round(chisq.test(table(af,bf))$p.value,2)))
-kable(table(af,cf),row.names = T,caption = paste0("A female x C female, p-value: ",round(chisq.test(table(af,cf))$p.value,2)))
-kable(table(bf,cf),row.names = T,caption = paste0("B female x C female, p-value: ",round(chisq.test(table(bf,cf))$p.value,2)))
+kable(table(af,bf),row.names = T,caption = paste0("PK female x TR female, $\\chi^2$ p-value: ",round(chisq.test(table(af,bf))$p.value,2)))
+kable(table(af,cf),row.names = T,caption = paste0("PK female x ACP female, $\\chi^2$ p-value: ",round(chisq.test(table(af,cf))$p.value,2)))
+kable(table(bf,cf),row.names = T,caption = paste0("TR female x ACP female, $\\chi^2$ p-value: ",round(chisq.test(table(bf,cf))$p.value,2)))
 ```
 
 ```{r}
-kable(table(am,bm),row.names = T,caption = paste0("A male x B male, p-value: ",round(chisq.test(table(am,bm))$p.value,2)))
-kable(table(am,cm),row.names = T,caption = paste0("A male x C male, p-value: ",round(chisq.test(table(am,cm))$p.value,2)))
-kable(table(bm,cm),row.names = T,caption = paste0("B male x C male, p-value: ",round(chisq.test(table(bm,cm))$p.value,2)))
+kable(table(am,bm),row.names = T,caption = paste0("PK male x TR male, $\\chi^2$ p-value: ",round(chisq.test(table(am,bm))$p.value,2)))
+kable(table(am,cm),row.names = T,caption = paste0("PK male x ACP male, $\\chi^2$ p-value: ",round(chisq.test(table(am,cm))$p.value,2)))
+kable(table(bm,cm),row.names = T,caption = paste0("TR male x ACP male, $\\chi^2$ p-value: ",round(chisq.test(table(bm,cm))$p.value,2)))
 ```
 
 ## Conditioned on Digital education
 
 ```{r}
-kable(table(aja,bja),row.names = T,caption = paste0("A ja x B ja, p-value: ",round(chisq.test(table(aja,bja))$p.value,2)))
-kable(table(aja,cja),row.names = T,caption = paste0("A ja x C ja, p-value: ",round(chisq.test(table(aja,cja))$p.value,2)))
-kable(table(bja,cja),row.names = T,caption = paste0("B ja x C ja, p-value: ",round(chisq.test(table(bja,cja))$p.value,2)))
+kable(table(aja,bja),row.names = T,caption = paste0("PK ja x TR ja, $\\chi^2$ p-value: ",round(chisq.test(table(aja,bja))$p.value,2)))
+kable(table(aja,cja),row.names = T,caption = paste0("PK ja x ACP ja, $\\chi^2$ p-value: ",round(chisq.test(table(aja,cja))$p.value,2)))
+kable(table(bja,cja),row.names = T,caption = paste0("TR ja x ACP ja, $\\chi^2$ p-value: ",round(chisq.test(table(bja,cja))$p.value,2)))
 ```
 
 ```{r}
-kable(table(anej,bnej),row.names = T,caption = paste0("A nej x B nej, p-value: ",round(chisq.test(table(anej,bnej))$p.value,2)))
-kable(table(anej,cnej),row.names = T,caption = paste0("A nej x C nej, p-value: ",round(chisq.test(table(anej,cnej))$p.value,2)))
-kable(table(bnej,cnej),row.names = T,caption = paste0("B nej x C nej, p-value: ",round(chisq.test(table(bnej,cnej))$p.value,2)))
+kable(table(anej,bnej),row.names = T,caption = paste0("PK nej x TR nej, $\\chi^2$ p-value: ",round(chisq.test(table(anej,bnej))$p.value,2)))
+kable(table(anej,cnej),row.names = T,caption = paste0("PK nej x ACP nej, $\\chi^2$ p-value: ",round(chisq.test(table(anej,cnej))$p.value,2)))
+kable(table(bnej,cnej),row.names = T,caption = paste0("TR nej x ACP nej, $\\chi^2$ p-value: ",round(chisq.test(table(bnej,cnej))$p.value,2)))
 ```
 
 
@@ -131,40 +133,40 @@ cja = c[tmp$q5.1_digedu == "ja"]
 cnej = c[tmp$q5.1_digedu == "nej"]
 ```
 
-## Unconditioned A x B x C
+## Unconditional A x B x C
 
 ```{r}
-kable(table(a,b),row.names = T,caption = paste0("A x B, p-value: ",round(chisq.test(table(a,b))$p.value,2)))
-kable(table(a,c),row.names = T,caption = paste0("A x C, p-value: ",round(chisq.test(table(a,c))$p.value,2)))
-kable(table(b,c),row.names = T,caption = paste0("B x C, p-value: ",round(chisq.test(table(b,c))$p.value,2)))
+kable(table(a,b),row.names = T,caption = paste0("PK x TR, $\\chi^2$ p-value: ",round(chisq.test(table(a,b))$p.value,2)))
+kable(table(a,c),row.names = T,caption = paste0("PK x ACP, $\\chi^2$ p-value: ",round(chisq.test(table(a,c))$p.value,2)))
+kable(table(b,c),row.names = T,caption = paste0("TR x ACP, $\\chi^2$ p-value: ",round(chisq.test(table(b,c))$p.value,2)))
 ```
 
 ## Conditioned on gender
 
 ```{r}
-kable(table(af,bf),row.names = T,caption = paste0("A female x B female, p-value: ",round(chisq.test(table(af,bf))$p.value,2)))
-kable(table(af,cf),row.names = T,caption = paste0("A female x C female, p-value: ",round(chisq.test(table(af,cf))$p.value,2)))
-kable(table(bf,cf),row.names = T,caption = paste0("B female x C female, p-value: ",round(chisq.test(table(bf,cf))$p.value,2)))
+kable(table(af,bf),row.names = T,caption = paste0("PK female x TR female, $\\chi^2$ p-value: ",round(chisq.test(table(af,bf))$p.value,2)))
+kable(table(af,cf),row.names = T,caption = paste0("PK female x ACP female, $\\chi^2$ p-value: ",round(chisq.test(table(af,cf))$p.value,2)))
+kable(table(bf,cf),row.names = T,caption = paste0("TR female x ACP female, $\\chi^2$ p-value: ",round(chisq.test(table(bf,cf))$p.value,2)))
 ```
 
 ```{r}
-kable(table(am,bm),row.names = T,caption = paste0("A male x B male, p-value: ",round(chisq.test(table(am,bm))$p.value,2)))
-kable(table(am,cm),row.names = T,caption = paste0("A male x C male, p-value: ",round(chisq.test(table(am,cm))$p.value,2)))
-kable(table(bm,cm),row.names = T,caption = paste0("B male x C male, p-value: ",round(chisq.test(table(bm,cm))$p.value,2)))
+kable(table(am,bm),row.names = T,caption = paste0("PK male x TR male, $\\chi^2$ p-value: ",round(chisq.test(table(am,bm))$p.value,2)))
+kable(table(am,cm),row.names = T,caption = paste0("PK male x ACP male, $\\chi^2$ p-value: ",round(chisq.test(table(am,cm))$p.value,2)))
+kable(table(bm,cm),row.names = T,caption = paste0("TR male x ACP male, $\\chi^2$ p-value: ",round(chisq.test(table(bm,cm))$p.value,2)))
 ```
 
 ## Conditioned on Digital education
 
 ```{r}
-kable(table(aja,bja),row.names = T,caption = paste0("A ja x B ja, p-value: ",round(chisq.test(table(aja,bja))$p.value,2)))
-kable(table(aja,cja),row.names = T,caption = paste0("A ja x C ja, p-value: ",round(chisq.test(table(aja,cja))$p.value,2)))
-kable(table(bja,cja),row.names = T,caption = paste0("B ja x C ja, p-value: ",round(chisq.test(table(bja,cja))$p.value,2)))
+kable(table(aja,bja),row.names = T,caption = paste0("PK ja x TR ja, $\\chi^2$ p-value: ",round(chisq.test(table(aja,bja))$p.value,2)))
+kable(table(aja,cja),row.names = T,caption = paste0("PK ja x ACP ja, $\\chi^2$ p-value: ",round(chisq.test(table(aja,cja))$p.value,2)))
+kable(table(bja,cja),row.names = T,caption = paste0("TR ja x ACP ja, $\\chi^2$ p-value: ",round(chisq.test(table(bja,cja))$p.value,2)))
 ```
 
 ```{r}
-kable(table(anej,bnej),row.names = T,caption = paste0("A nej x B nej, p-value: ",round(chisq.test(table(anej,bnej))$p.value,2)))
-kable(table(anej,cnej),row.names = T,caption = paste0("A nej x C nej, p-value: ",round(chisq.test(table(anej,cnej))$p.value,2)))
-kable(table(bnej,cnej),row.names = T,caption = paste0("B nej x C nej, p-value: ",round(chisq.test(table(bnej,cnej))$p.value,2)))
+kable(table(anej,bnej),row.names = T,caption = paste0("PK nej x TR nej, $\\chi^2$ p-value: ",round(chisq.test(table(anej,bnej))$p.value,2)))
+kable(table(anej,cnej),row.names = T,caption = paste0("PK nej x ACP nej, $\\chi^2$ p-value: ",round(chisq.test(table(anej,cnej))$p.value,2)))
+kable(table(bnej,cnej),row.names = T,caption = paste0("TR nej x ACP nej, $\\chi^2$ p-value: ",round(chisq.test(table(bnej,cnej))$p.value,2)))
 ```
 
 
@@ -195,38 +197,38 @@ cja = c[tmp$q5.1_digedu == "ja"]
 cnej = c[tmp$q5.1_digedu == "nej"]
 ```
 
-## Unconditioned A x B x C
+## Unconditional A x B x C
 
 ```{r}
-kable(table(a,b),row.names = T,caption = paste0("A x B, p-value: ",round(chisq.test(table(a,b))$p.value,2)))
-kable(table(a,c),row.names = T,caption = paste0("A x C, p-value: ",round(chisq.test(table(a,c))$p.value,2)))
-kable(table(b,c),row.names = T,caption = paste0("B x C, p-value: ",round(chisq.test(table(b,c))$p.value,2)))
+kable(table(a,b),row.names = T,caption = paste0("PK x TR, $\\chi^2$ p-value: ",round(chisq.test(table(a,b))$p.value,2)))
+kable(table(a,c),row.names = T,caption = paste0("PK x ACP, $\\chi^2$ p-value: ",round(chisq.test(table(a,c))$p.value,2)))
+kable(table(b,c),row.names = T,caption = paste0("TR x ACP, $\\chi^2$ p-value: ",round(chisq.test(table(b,c))$p.value,2)))
 ```
 
 ## Conditioned on gender
 
 ```{r}
-kable(table(af,bf),row.names = T,caption = paste0("A female x B female, p-value: ",round(chisq.test(table(af,bf))$p.value,2)))
-kable(table(af,cf),row.names = T,caption = paste0("A female x C female, p-value: ",round(chisq.test(table(af,cf))$p.value,2)))
-kable(table(bf,cf),row.names = T,caption = paste0("B female x C female, p-value: ",round(chisq.test(table(bf,cf))$p.value,2)))
+kable(table(af,bf),row.names = T,caption = paste0("PK female x TR female, $\\chi^2$ p-value: ",round(chisq.test(table(af,bf))$p.value,2)))
+kable(table(af,cf),row.names = T,caption = paste0("PK female x ACP female, $\\chi^2$ p-value: ",round(chisq.test(table(af,cf))$p.value,2)))
+kable(table(bf,cf),row.names = T,caption = paste0("TR female x ACP female, $\\chi^2$ p-value: ",round(chisq.test(table(bf,cf))$p.value,2)))
 ```
 
 ```{r}
-kable(table(am,bm),row.names = T,caption = paste0("A male x B male, p-value: ",round(chisq.test(table(am,bm))$p.value,2)))
-kable(table(am,cm),row.names = T,caption = paste0("A male x C male, p-value: ",round(chisq.test(table(am,cm))$p.value,2)))
-kable(table(bm,cm),row.names = T,caption = paste0("B male x C male, p-value: ",round(chisq.test(table(bm,cm))$p.value,2)))
+kable(table(am,bm),row.names = T,caption = paste0("PK male x TR male, $\\chi^2$ p-value: ",round(chisq.test(table(am,bm))$p.value,2)))
+kable(table(am,cm),row.names = T,caption = paste0("PK male x ACP male, $\\chi^2$ p-value: ",round(chisq.test(table(am,cm))$p.value,2)))
+kable(table(bm,cm),row.names = T,caption = paste0("TR male x ACP male, $\\chi^2$ p-value: ",round(chisq.test(table(bm,cm))$p.value,2)))
 ```
 
 ## Conditioned on Digital education
 
 ```{r}
-kable(table(aja,bja),row.names = T,caption = paste0("A ja x B ja, p-value: ",round(chisq.test(table(aja,bja))$p.value,2)))
-kable(table(aja,cja),row.names = T,caption = paste0("A ja x C ja, p-value: ",round(chisq.test(table(aja,cja))$p.value,2)))
-kable(table(bja,cja),row.names = T,caption = paste0("B ja x C ja, p-value: ",round(chisq.test(table(bja,cja))$p.value,2)))
+kable(table(aja,bja),row.names = T,caption = paste0("PK ja x TR ja, $\\chi^2$ p-value: ",round(chisq.test(table(aja,bja))$p.value,2)))
+kable(table(aja,cja),row.names = T,caption = paste0("PK ja x ACP ja, $\\chi^2$ p-value: ",round(chisq.test(table(aja,cja))$p.value,2)))
+kable(table(bja,cja),row.names = T,caption = paste0("TR ja x ACP ja, $\\chi^2$ p-value: ",round(chisq.test(table(bja,cja))$p.value,2)))
 ```
 
 ```{r}
-kable(table(anej,bnej),row.names = T,caption = paste0("A nej x B nej, p-value: ",round(chisq.test(table(anej,bnej))$p.value,2)))
-kable(table(anej,cnej),row.names = T,caption = paste0("A nej x C nej, p-value: ",round(chisq.test(table(anej,cnej))$p.value,2)))
-kable(table(bnej,cnej),row.names = T,caption = paste0("B nej x C nej, p-value: ",round(chisq.test(table(bnej,cnej))$p.value,2)))
+kable(table(anej,bnej),row.names = T,caption = paste0("PK nej x TR nej, $\\chi^2$ p-value: ",round(chisq.test(table(anej,bnej))$p.value,2)))
+kable(table(anej,cnej),row.names = T,caption = paste0("PK nej x ACP nej, $\\chi^2$ p-value: ",round(chisq.test(table(anej,cnej))$p.value,2)))
+kable(table(bnej,cnej),row.names = T,caption = paste0("TR nej x ACP nej, $\\chi^2$ p-value: ",round(chisq.test(table(bnej,cnej))$p.value,2)))
 ```
