@@ -65,3 +65,10 @@ table(dfu$bin_edit,round(predict(mx,type="response")))
 
 fk1 = kmeans(dfnum[,sapply(dfnum,is.numeric)],centers=2)
 lapply(dfnum,function(x,y)table(x,y),y=fk1$cluster)
+
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-# libraries
+ # libraries
 
 library(XLConnect)
 library(lubridate)
@@ -11,3 +11,5 @@ library(nnet)
 library(MASS)
 library(class)
 library(lme4)
+library(lsr)
+require(effsize)

@@ -1,46 +1,44 @@
-# Hluca3
 
 
-# Frequency ---------------------------------------------------------------
 
-# Usage frequency
-hluca3.dat1 = dfo[,c("q1.1_usefb","q1.2_useig","q1.3_usesc","q5.1_digedu")]
-hluca3.dat2 = dfo[,c("q8.1_freqpost","q8.2_freqsend","q8.3_freqread","q5.1_digedu")]
+par(mfrow=c(3,3),mar=c(4,4,6,.5))
+barplot(table(a), col=grey.colors(1,.9,.3),ylab="Unconditional",xpd=NA)
+fkit(a,cex=2)
+barplot(table(b), col=grey.colors(1,.9,.3))
+fkit(b)
+barplot(table(c), col=grey.colors(1,.9,.3))
+fkit(c)
 
-nluca1 = model.listZ(pred = hluca3.dat1, resp = dfo[,c("q2.1_nocare","q7.1_editedprivacy")])
-lapply(nluca1,class.pred)
-lapply(nluca1,summary)
-nluca2 = model.listZ(pred = hluca3.dat2, resp = dfo[,c("q2.1_nocare","q7.1_editedprivacy")])
-lapply(nluca2,class.pred)
-lapply(nluca2,summary)
+barplot(rbindme(am,af),beside=T,col=rainbow(2,start=.55,end=0,alpha = .3), ylab="Gender")
+fkit(am,af)
+barplot(rbindme(bm,bf),beside=T,col=rainbow(2,start=.55,end=0,alpha = .3))
+fkit(bm,bf)
+barplot(rbindme(cm,cf),beside=T,col=rainbow(2,start=.55,end=0,alpha = .3))
+legend("right",c("M", "F"), fill=rainbow(2,start=.55,end=0,alpha = .3),bty="n",horiz=F,xpd=NA)
 
-# Trust
-hluca3.dat3 = dfo[,c("q14.1_trustconn","q15.1_trustsell","q16.1_trustpriv","q5.1_digedu","platform")]
-hluca3.dat3demo = cbind(hluca3.dat3,demo.dat)
+barplot(rbindme(aja,anej),beside=T,col=grey.colors(2,.9,.3), ylab="Dig. education", xlab = "PR")
+barplot(rbindme(bja,bnej),beside=T,col=grey.colors(2,.9,.3), xlab = "TR")
+barplot(rbindme(cja,cnej),beside=T,col=grey.colors(2,.9,.3), xlab = "ACP")
+legend("right",c("Ja", "Nej"), fill=grey.colors(2,.9,.3),bty="n",horiz=F,xpd=NA)
 
-nluca3 = model.listZ(pred = hluca3.dat3, resp = dfo[,c("q2.1_nocare","q7.1_editedprivacy")])
-lapply(nluca3,class.pred)
-lapply(nluca3,summary)
-# nluca3o2 = model.listZ2(pred = hluca3.dat3, resp = dfu[,c("q2.1_nocare","q7.1_editedprivacy")])
-# lapply(nluca3o2,class.pred)
-nluca4 = model.listZ(pred = hluca3.dat3demo, resp = dfu[,c("q2.1_nocare","q7.1_editedprivacy")])
-lapply(nluca4,class.pred)
+fkit = function(x,y=NULL,cex=2,col=3:4,...){
+  horiz = par("usr")[2]
+  vert = par("usr")[4]
+  m1 = round(mean(x),2)
+  sd1 = round(sd(x),2)
+  t1 = bquote(mu~.(m1)~sigma~.(sd1))
+  if(is.null(y)){
+    text(x = horiz/2, y = vert, labels = t1, xpd = NA, cex = cex, col = col[1], ...)
+    return()
+  }
+  m2 = round(mean(y),2)
+  sd2 = round(sd(y),2)
+  t2 = bquote(mu~.(m2)~sigma~.(sd2))
+  text(x=horiz/4, y = vert, labels = t1, col=col[1], xpd=NA, cex=cex,...)
+  text(x=3/4*horiz, y = vert, labels = t2, xpd = NA, cex = cex, col = col[2], ...)
+}
 
 
-# Audience vs trust audience
-hluca3.dat4 = dfu[,c("q11.1_seemypost","q13.1_audience","q5.1_digedu","platform")]
-hluca3.dat4demo = cbind(hluca3.dat4,demo.dat)
 
-nluca5 = model.listZ(pred = hluca3.dat4, resp = dfu["q14.1_trustconn"])
-lapply(nluca5,class.pred)
-nluca5aic = model.listZ(pred = dfo[,-19], resp = dfo["q14.1_trustconn"],link="loglog", threshold = "symmetric")
-lapply(nluca5aic,class.pred)
-nluca6 = model.listZ(pred = hluca3.dat4demo, resp = dfu["q14.1_trustconn"])
-lapply(nluca6,class.pred)
-
-# Little hypocrits
-
-hypocrits1 = model.listZ(pred = dfu["q18.1_targetfr"], resp = dfu["q14.1_trustconn"],link="cauchit")
-lapply(hypocrits1,class.pred)
 
 

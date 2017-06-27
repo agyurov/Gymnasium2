@@ -203,3 +203,54 @@ glm.pred = function(x,tresh=.5){
   fk = cbind.data.frame(fk,prob=round(predict(x,newdata = fk,type="response"),2))
   return(list(tbl=table(true=x$y,pred=pr), oddz = fk))
 }
+
+cramv = function(x,y){
+  n = length(x)
+  chitest = chisq.test(table(x,y))
+  return(sqrt((chitest$statistic/n)/(min(dim(chitest))-1)))
+}
+
+repcliff = function(x,y){
+  c = cliff.delta(x,y)
+  out = paste0("Clff's $\\delta$: ", c$magnitude, ", estimated at ", 
+               round(c$conf.int[1],2), " < ", round(c$estimate,2), " < ", round(c$conf.int[2],2))
+  return(out)
+}
+
+rbindme = function(x,y){
+  x = factor(x)
+  y = factor(y)
+  xl = length(levels(x))
+  yl = length(levels(y))
+  #
+  if(xl == yl){
+    return(rbind(table(x),table(y)))
+  }
+  #
+  if(xl > yl){
+    y = factor(y,levels=levels(x))
+    return(rbind(table(x),table(y)))
+  }
+  #
+  if(yl > xl){
+    x = factor(x,levels=levels(y))
+    return(rbind(table(x),table(y)))
+  }
+}
+
+fkit = function(x, y = NULL, cex = 1, col= 3:4, scale = 1.1, ...){
+  horiz = par("usr")[2]
+  vert = par("usr")[4]
+  m1 = round(mean(x),2)
+  sd1 = round(sd(x),2)
+  t1 = bquote(mu~.(m1)~sigma~.(sd1))
+  if(is.null(y)){
+    text(x = horiz/2, y = vert, labels = t1, xpd = NA, cex = cex, col = col[1], ...)
+    return(invisible(NULL))
+  }
+  m2 = round(mean(y),2)
+  sd2 = round(sd(y),2)
+  t2 = bquote(mu~.(m2)~sigma~.(sd2))
+  text(x=horiz/4, y = vert * scale, labels = t1, col=col[1], xpd=NA, cex=cex,...)
+  text(x=3/4*horiz, y = vert * scale, labels = t2, xpd = NA, cex = cex, col = col[2], ...)
+}
