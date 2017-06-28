@@ -1,0 +1,255 @@
+---
+title: "crosstabs (> ^ , ^)>"
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: 3
+    number_sections: yes
+header-includes:
+- \usepackage{fancyhdr, xcolor}
+- \pagestyle{fancy}
+- \fancyhead[CO,CE]{}
+- \fancyfoot[CO,CE]{\hyperlink{toc}{Back to TOC}}
+- \fancyfoot[LE,RO]{\thepage}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,message = FALSE, warning = FALSE,fig.height=2.5)
+source("libraries.R")
+load(".RData")
+my_report <- function(...) {
+
+  fmt <- rmarkdown::pdf_document(...)
+
+  fmt$knitr$knit_hooks$size = function(before, options, envir) {
+    if (before) return(paste0("\n \\", options$size, "\n\n"))
+    else return("\n\n \\normalsize \n")
+  }
+
+  return(fmt)
+}
+
+mnsd = function(x,y=NULL){
+  
+}
+nmz = c("Total", ", male", ", female", ", educated", ", not educated")
+```
+
+```{r}
+tmp = fbnum
+a = tmp$q10.1_understand
+af = a[tmp$q3.1_gender == "kvinde"]
+am = a[tmp$q3.1_gender == "mand"]
+aja = a[tmp$q5.1_digedu == "ja"]
+anej = a[tmp$q5.1_digedu == "nej"]
+#
+b = rowMeans(tmp[,20:21])
+b = round(b,1)
+bf = b[tmp$q3.1_gender == "kvinde"]
+bm = b[tmp$q3.1_gender == "mand"]
+bja = b[tmp$q5.1_digedu == "ja"]
+bnej = b[tmp$q5.1_digedu == "nej"]
+
+#
+c = rowMeans(tmp[,22:24])
+c = round(c,1)
+cf = c[tmp$q3.1_gender == "kvinde"]
+cm = c[tmp$q3.1_gender == "mand"]
+cja = c[tmp$q5.1_digedu == "ja"]
+cnej = c[tmp$q5.1_digedu == "nej"]
+```
+
+# Definitions 
+
+* \textbf{PK} (perceived knowledge) - q10 understand  with unique values `r sort(unique(a))`
+
+* \textbf{TR} (trust) - "mean" of q15 trustsell and q16 trustpriv  with unique values `r sort(unique(b))`
+
+* \textbf{ACP} (acceptance of commerical practices) - "mean" of q17 targetme, q18 targetfr and q19 comfortsell
+with unique values `r sort(unique(c))`
+
+
+
+Note that $\mu(1,3) = \mu(3,1) = \mu(2,2)$ etc... The table captions include $\chi^2$ test p-values, effect size estimates based on Cliff's $\delta$ as well as a t.test result for comparisson of the means "$\not =$" or "$=$".
+
+* Large $\chi^2$ p-values indicate independence.
+
+* Cliff's $\delta$ is an effect size measure for ordinal data $\in[-1,1]$ and is reported with 95% confidence intervals.
+
+$$ \delta(x,y) < 0, \text{ for x "smaller" than y}$$
+$$ \delta(x,y) > 0, \text{ for x "larger" than y}$$
+
+In each section are shown three tables in the order PK vs TR, PK vs ACP and TR vs ACP. 
+
+\newpage
+
+# Facebook
+
+`r paste(nmz, unlist(lapply(list(a,am,af,aja,anej),length)), collapse = "")`
+
+## Plots
+
+```{r, fig.height=6, fig.width=7}
+par(mfrow=c(3,3),mar=c(4,4,2,.5))
+barplot(table(a), col=grey.colors(1,.9,.3),ylab="Unconditional",xpd=NA)
+fkit(a, col=1)
+barplot(table(b), col=grey.colors(1,.9,.3))
+fkit(b, col=1)
+barplot(table(c), col=grey.colors(1,.9,.3))
+fkit(c, col=1)
+
+barplot(rbindme(am,af),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5), ylab="Gender")
+fkit2(am, af, col=rainbow(2,start=.6,end=0,alpha = .5))
+barplot(rbindme(bm,bf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5))
+fkit2(bm, bf, col=rainbow(2,start=.6,end=0,alpha = .5))
+barplot(rbindme(cm,cf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5))
+fkit2(cm, cf, col=rainbow(2,start=.6,end=0,alpha = .5))
+legend("right",c("M", "F"), fill=rainbow(2,start=.6,end=0,alpha = .5),bty="n",horiz=F,xpd=NA)
+
+barplot(rbindme(aja,anej),beside=T,col=grey.colors(2,.7,.3), ylab="Dig. education", xlab = "PK")
+fkit2(aja, anej, col=grey.colors(2,.7,.3))
+barplot(rbindme(bja,bnej),beside=T,col=grey.colors(2,.7,.3), xlab = "TR")
+fkit2(bja, bnej, col=grey.colors(2,.7,.3))
+barplot(rbindme(cja,cnej),beside=T,col=grey.colors(2,.7,.3), xlab = "ACP")
+fkit2(cja, cnej, col=grey.colors(2,.7,.3))
+legend("right",c("Ja", "Nej"), fill=grey.colors(2,.7,.3),bty="n",horiz=F,xpd=NA)
+```
+
+## Summary table
+
+```{r}
+yet.another.table(chi=T)
+# yet.another.table(chi=F)
+```
+
+\newpage
+
+
+# Instagram
+
+```{r}
+tmp = ignum
+a = tmp$q10.1_understand
+af = a[tmp$q3.1_gender == "kvinde"]
+am = a[tmp$q3.1_gender == "mand"]
+aja = a[tmp$q5.1_digedu == "ja"]
+anej = a[tmp$q5.1_digedu == "nej"]
+#
+b = rowMeans(tmp[,20:21])
+b = round(b,1)
+bf = b[tmp$q3.1_gender == "kvinde"]
+bm = b[tmp$q3.1_gender == "mand"]
+bja = b[tmp$q5.1_digedu == "ja"]
+bnej = b[tmp$q5.1_digedu == "nej"]
+
+#
+c = rowMeans(tmp[,22:24])
+c = round(c,1)
+cf = c[tmp$q3.1_gender == "kvinde"]
+cm = c[tmp$q3.1_gender == "mand"]
+cja = c[tmp$q5.1_digedu == "ja"]
+cnej = c[tmp$q5.1_digedu == "nej"]
+```
+
+`r paste(nmz, unlist(lapply(list(a,am,af,aja,anej),length)), collapse = "")`
+
+## Plots
+
+```{r, fig.height=6, fig.width=7}
+par(mfrow=c(3,3),mar=c(4,4,2,.5))
+barplot(table(a), col=grey.colors(1,.9,.3),ylab="Unconditional",xpd=NA)
+fkit(a, col=1)
+barplot(table(b), col=grey.colors(1,.9,.3))
+fkit(b, col=1)
+barplot(table(c), col=grey.colors(1,.9,.3))
+fkit(c, col=1)
+
+barplot(rbindme(am,af),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5), ylab="Gender")
+fkit2(am, af, col=rainbow(2,start=.6,end=0,alpha = .5))
+barplot(rbindme(bm,bf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5))
+fkit2(bm, bf, col=rainbow(2,start=.6,end=0,alpha = .5))
+barplot(rbindme(cm,cf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5))
+fkit2(cm, cf, col=rainbow(2,start=.6,end=0,alpha = .5))
+legend("right",c("M", "F"), fill=rainbow(2,start=.6,end=0,alpha = .5),bty="n",horiz=F,xpd=NA)
+
+barplot(rbindme(aja,anej),beside=T,col=grey.colors(2,.7,.3), ylab="Dig. education", xlab = "PK")
+fkit2(aja, anej, col=grey.colors(2,.7,.3))
+barplot(rbindme(bja,bnej),beside=T,col=grey.colors(2,.7,.3), xlab = "TR")
+fkit2(bja, bnej, col=grey.colors(2,.7,.3))
+barplot(rbindme(cja,cnej),beside=T,col=grey.colors(2,.7,.3), xlab = "ACP")
+fkit2(cja, cnej, col=grey.colors(2,.7,.3))
+legend("right",c("Ja", "Nej"), fill=grey.colors(2,.7,.3),bty="n",horiz=F,xpd=NA)
+```
+
+## Summary table
+
+```{r}
+yet.another.table(chi=T)
+# yet.another.table(chi=F)
+```
+
+
+\newpage
+
+# Snapchat 
+
+```{r}
+tmp = scnum
+a = tmp$q10.1_understand
+af = a[tmp$q3.1_gender == "kvinde"]
+am = a[tmp$q3.1_gender == "mand"]
+aja = a[tmp$q5.1_digedu == "ja"]
+anej = a[tmp$q5.1_digedu == "nej"]
+#
+b = rowMeans(tmp[,20:21])
+b = round(b,1)
+bf = b[tmp$q3.1_gender == "kvinde"]
+bm = b[tmp$q3.1_gender == "mand"]
+bja = b[tmp$q5.1_digedu == "ja"]
+bnej = b[tmp$q5.1_digedu == "nej"]
+
+#
+c = rowMeans(tmp[,22:24])
+c = round(c,1)
+cf = c[tmp$q3.1_gender == "kvinde"]
+cm = c[tmp$q3.1_gender == "mand"]
+cja = c[tmp$q5.1_digedu == "ja"]
+cnej = c[tmp$q5.1_digedu == "nej"]
+```
+
+`r paste(nmz, unlist(lapply(list(a,am,af,aja,anej),length)), collapse = "")`
+
+## Plots
+
+```{r, fig.height=6, fig.width=7}
+par(mfrow=c(3,3),mar=c(4,4,2,.5))
+barplot(table(a), col=grey.colors(1,.9,.3),ylab="Unconditional",xpd=NA)
+fkit(a, col=1)
+barplot(table(b), col=grey.colors(1,.9,.3))
+fkit(b, col=1)
+barplot(table(c), col=grey.colors(1,.9,.3))
+fkit(c, col=1)
+
+barplot(rbindme(am,af),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5), ylab="Gender")
+fkit2(am, af, col=rainbow(2,start=.6,end=0,alpha = .5))
+barplot(rbindme(bm,bf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5))
+fkit2(bm, bf, col=rainbow(2,start=.6,end=0,alpha = .5))
+barplot(rbindme(cm,cf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5))
+fkit2(cm, cf, col=rainbow(2,start=.6,end=0,alpha = .5))
+legend("right",c("M", "F"), fill=rainbow(2,start=.6,end=0,alpha = .5),bty="n",horiz=F,xpd=NA)
+
+barplot(rbindme(aja,anej),beside=T,col=grey.colors(2,.7,.3), ylab="Dig. education", xlab = "PK")
+fkit2(aja, anej, col=grey.colors(2,.7,.3))
+barplot(rbindme(bja,bnej),beside=T,col=grey.colors(2,.7,.3), xlab = "TR")
+fkit2(bja, bnej, col=grey.colors(2,.7,.3))
+barplot(rbindme(cja,cnej),beside=T,col=grey.colors(2,.7,.3), xlab = "ACP")
+fkit2(cja, cnej, col=grey.colors(2,.7,.3))
+legend("right",c("Ja", "Nej"), fill=grey.colors(2,.7,.3),bty="n",horiz=F,xpd=NA)
+```
+
+## Summary table
+
+```{r}
+yet.another.table(chi=T)
+# yet.another.table(chi=F)
+```

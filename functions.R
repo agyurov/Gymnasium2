@@ -265,7 +265,7 @@ yet.another.table = function(chi=T){
     fcol = c(chisq.test(table(af,bf))$p.value, chisq.test(table(af,cf))$p.value, chisq.test(table(bf,cf))$p.value)
     jacol = c(chisq.test(table(aja,bja))$p.value, chisq.test(table(aja,cja))$p.value, chisq.test(table(bja,cja))$p.value)
     nejcol = c(chisq.test(table(anej,bnej))$p.value, chisq.test(table(anej,cnej))$p.value, chisq.test(table(bnej,cnej))$p.value)
-    tbl1 = cbind(ucol, mcol, fcol, jacol,nejcol)
+    tbl1 = cbind(ucol, fcol, mcol, jacol,nejcol)
   }
   if(chi){
     ucol2 = c(cliff.delta(a,b)$estimate, cliff.delta(a,c)$estimate, cliff.delta(b,c)$estimate)
@@ -273,10 +273,41 @@ yet.another.table = function(chi=T){
     fcol2 = c(cliff.delta(af,bf)$estimate, cliff.delta(af,cf)$estimate, cliff.delta(bf,cf)$estimate)
     jacol2 = c(cliff.delta(aja,bja)$estimate, cliff.delta(aja,cja)$estimate, cliff.delta(bja,cja)$estimate)
     nejcol2 = c(cliff.delta(anej,bnej)$estimate, cliff.delta(anej,cnej)$estimate, cliff.delta(bnej,cnej)$estimate)
-    tbl2 = cbind(ucol2, mcol2, fcol2, jacol2, nejcol2)
+    tbl2 = cbind(ucol2, fcol2, mcol2, jacol2, nejcol2)
   }
   tbl = cbind(tbl1, tbl2)
   rownames(tbl) = rownamez
   colnames(tbl) = colnamez
   kable(tbl, digits =2, caption = "$\\chi^2$ and Cliff's $\\delta$ table")
+}
+
+repttest = function(x,y){
+  p = t.test(x,y)$p.value
+  # out = ifelse(p < .05, bquote(phantom(1) != phantom(1)), bquote(phantom(1) == phantom(1)))
+  if(p < .05){
+    out = bquote(phantom(1) != phantom(1))
+  }
+  if(p > .05){
+    out = bquote(phantom(1) == phantom(1))
+  }
+  return(out)
+}
+
+fkit2 = function(x, y = NULL, cex = 1, col= 3:4, scale = 1.1, ...){
+  horiz = par("usr")[2]
+  vert = par("usr")[4]
+  m1 = round(mean(x),2)
+  sd1 = round(sd(x),2)
+  t1 = bquote(mu~.(m1)~sigma~.(sd1))
+  if(is.null(y)){
+    text(x = horiz/2, y = vert * scale, labels = t1, xpd = NA, cex = cex, col = col[1], ...)
+    return(invisible(NULL))
+  }
+  t3 = repttest(x,y)
+  m2 = round(mean(y),2)
+  sd2 = round(sd(y),2)
+  t2 = bquote(mu~.(m2)~sigma~.(sd2))
+  text(x=horiz/4, y = vert * scale, labels = t1, col=col[1], xpd=NA, cex=cex,...)
+  text(x=3/4*horiz, y = vert * scale, labels = t2, xpd = NA, cex = cex, col = col[2], ...)
+  text(x=horiz/2, y = vert * scale, labels = t3, col=col[1], xpd=NA, cex=cex,...)
 }
