@@ -72,7 +72,7 @@ Note that $\mu(1,3) = \mu(3,1) = \mu(2,2)$ etc... The table captions include $\c
 
 * Large $\chi^2$ p-values indicate independence.
 
-* Cliff's $\delta$ is an effect size measure for ordinal data $\in[-1,1]$ and is reported with 95% confidence intervals.
+* Cliff's $\delta$ is an effect size measure for ordinal data $\in[-1,1]$ and is reported with 95% confidence intervals. In essence, it is a measure that tells us the $P(X=x>Y=y)$ where -1 means never, 0 means X=Y and 1 means always.
 
 $$ \delta(x,y) < 0, \text{ for x "smaller" than y}$$
 
@@ -89,27 +89,36 @@ In each section are shown three tables in the order PK vs TR, PK vs ACP and TR v
 ## Plots
 
 ```{r, fig.height=6, fig.width=7}
-par(mfrow=c(3,3),mar=c(4,4,2,.5))
+par(mfrow=c(3,3),mar=c(2,4,4.3,.5))
 barplot(table(a), col=grey.colors(1,.9,.3),ylab="Unconditional",xpd=NA)
+title("PK", cex=2)
 fkit(a, col=1)
-barplot(table(b), col=grey.colors(1,.9,.3))
+barplot(table(b), col=grey.colors(1,.9,.3), xpd=NA)
+title("TR", cex=2)
 fkit(b, col=1)
 barplot(table(c), col=grey.colors(1,.9,.3))
+title("ACP", cex=2)
 fkit(c, col=1)
 
-barplot(rbindme(am,af),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5), ylab="Gender")
+barplot(rbindme(am,af),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5), ylab="Gender", xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(am,af)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(am, af, col=rainbow(2,start=.6,end=0,alpha = .5))
-barplot(rbindme(bm,bf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5))
+barplot(rbindme(bm,bf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5), xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(bm,bf)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(bm, bf, col=rainbow(2,start=.6,end=0,alpha = .5))
-barplot(rbindme(cm,cf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5))
+barplot(rbindme(cm,cf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5), xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(cm,cf)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(cm, cf, col=rainbow(2,start=.6,end=0,alpha = .5))
 legend("right",c("M", "F"), fill=rainbow(2,start=.6,end=0,alpha = .5),bty="n",horiz=F,xpd=NA)
 
-barplot(rbindme(aja,anej),beside=T,col=grey.colors(2,.7,.3), ylab="Dig. education", xlab = "PK")
+barplot(rbindme(aja,anej),beside=T,col=grey.colors(2,.7,.3), ylab="Dig. education", xlab = "PK", xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(aja,anej)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(aja, anej, col=grey.colors(2,.7,.3))
-barplot(rbindme(bja,bnej),beside=T,col=grey.colors(2,.7,.3), xlab = "TR")
+barplot(rbindme(bja,bnej),beside=T,col=grey.colors(2,.7,.3), xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(bja,bnej)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(bja, bnej, col=grey.colors(2,.7,.3))
-barplot(rbindme(cja,cnej),beside=T,col=grey.colors(2,.7,.3), xlab = "ACP")
+barplot(rbindme(cja,cnej),beside=T,col=grey.colors(2,.7,.3), xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(cja,cnej)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(cja, cnej, col=grey.colors(2,.7,.3))
 legend("right",c("Ja", "Nej"), fill=grey.colors(2,.7,.3),bty="n",horiz=F,xpd=NA)
 ```
@@ -195,27 +204,36 @@ cnej = c[tmp$q5.1_digedu == "nej"]
 ## Plots
 
 ```{r, fig.height=6, fig.width=7}
-par(mfrow=c(3,3),mar=c(4,4,2,.5))
+par(mfrow=c(3,3),mar=c(2,4,4.3,.5))
 barplot(table(a), col=grey.colors(1,.9,.3),ylab="Unconditional",xpd=NA)
+title("PK", cex=2)
 fkit(a, col=1)
-barplot(table(b), col=grey.colors(1,.9,.3))
+barplot(table(b), col=grey.colors(1,.9,.3), xpd=NA)
+title("TR", cex=2)
 fkit(b, col=1)
 barplot(table(c), col=grey.colors(1,.9,.3))
+title("ACP", cex=2)
 fkit(c, col=1)
 
-barplot(rbindme(am,af),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5), ylab="Gender")
+barplot(rbindme(am,af),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5), ylab="Gender", xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(am,af)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(am, af, col=rainbow(2,start=.6,end=0,alpha = .5))
-barplot(rbindme(bm,bf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5))
+barplot(rbindme(bm,bf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5), xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(bm,bf)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(bm, bf, col=rainbow(2,start=.6,end=0,alpha = .5))
-barplot(rbindme(cm,cf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5))
+barplot(rbindme(cm,cf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5), xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(cm,cf)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(cm, cf, col=rainbow(2,start=.6,end=0,alpha = .5))
 legend("right",c("M", "F"), fill=rainbow(2,start=.6,end=0,alpha = .5),bty="n",horiz=F,xpd=NA)
 
-barplot(rbindme(aja,anej),beside=T,col=grey.colors(2,.7,.3), ylab="Dig. education", xlab = "PK")
+barplot(rbindme(aja,anej),beside=T,col=grey.colors(2,.7,.3), ylab="Dig. education", xlab = "PK", xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(aja,anej)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(aja, anej, col=grey.colors(2,.7,.3))
-barplot(rbindme(bja,bnej),beside=T,col=grey.colors(2,.7,.3), xlab = "TR")
+barplot(rbindme(bja,bnej),beside=T,col=grey.colors(2,.7,.3), xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(bja,bnej)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(bja, bnej, col=grey.colors(2,.7,.3))
-barplot(rbindme(cja,cnej),beside=T,col=grey.colors(2,.7,.3), xlab = "ACP")
+barplot(rbindme(cja,cnej),beside=T,col=grey.colors(2,.7,.3), xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(cja,cnej)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(cja, cnej, col=grey.colors(2,.7,.3))
 legend("right",c("Ja", "Nej"), fill=grey.colors(2,.7,.3),bty="n",horiz=F,xpd=NA)
 ```
@@ -301,27 +319,36 @@ cnej = c[tmp$q5.1_digedu == "nej"]
 ## Plots
 
 ```{r, fig.height=6, fig.width=7}
-par(mfrow=c(3,3),mar=c(4,4,2,.5))
+par(mfrow=c(3,3),mar=c(2,4,4.3,.5))
 barplot(table(a), col=grey.colors(1,.9,.3),ylab="Unconditional",xpd=NA)
+title("PK", cex=2)
 fkit(a, col=1)
-barplot(table(b), col=grey.colors(1,.9,.3))
+barplot(table(b), col=grey.colors(1,.9,.3), xpd=NA)
+title("TR", cex=2)
 fkit(b, col=1)
 barplot(table(c), col=grey.colors(1,.9,.3))
+title("ACP", cex=2)
 fkit(c, col=1)
 
-barplot(rbindme(am,af),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5), ylab="Gender")
+barplot(rbindme(am,af),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5), ylab="Gender", xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(am,af)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(am, af, col=rainbow(2,start=.6,end=0,alpha = .5))
-barplot(rbindme(bm,bf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5))
+barplot(rbindme(bm,bf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5), xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(bm,bf)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(bm, bf, col=rainbow(2,start=.6,end=0,alpha = .5))
-barplot(rbindme(cm,cf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5))
+barplot(rbindme(cm,cf),beside=T,col=rainbow(2,start=.6,end=0,alpha = .5), xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(cm,cf)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(cm, cf, col=rainbow(2,start=.6,end=0,alpha = .5))
 legend("right",c("M", "F"), fill=rainbow(2,start=.6,end=0,alpha = .5),bty="n",horiz=F,xpd=NA)
 
-barplot(rbindme(aja,anej),beside=T,col=grey.colors(2,.7,.3), ylab="Dig. education", xlab = "PK")
+barplot(rbindme(aja,anej),beside=T,col=grey.colors(2,.7,.3), ylab="Dig. education", xlab = "PK", xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(aja,anej)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(aja, anej, col=grey.colors(2,.7,.3))
-barplot(rbindme(bja,bnej),beside=T,col=grey.colors(2,.7,.3), xlab = "TR")
+barplot(rbindme(bja,bnej),beside=T,col=grey.colors(2,.7,.3), xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(bja,bnej)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(bja, bnej, col=grey.colors(2,.7,.3))
-barplot(rbindme(cja,cnej),beside=T,col=grey.colors(2,.7,.3), xlab = "ACP")
+barplot(rbindme(cja,cnej),beside=T,col=grey.colors(2,.7,.3), xaxt="n")
+mtext(bquote(delta==.(round(cliff.delta(cja,cnej)$estimate),2)),side=1, line = 1,xpd=NA,cex=1)
 fkit2(cja, cnej, col=grey.colors(2,.7,.3))
 legend("right",c("Ja", "Nej"), fill=grey.colors(2,.7,.3),bty="n",horiz=F,xpd=NA)
 ```

@@ -25,6 +25,45 @@ gym.test = function(x,y,...){
   return(out)
 }
 
+# Add missing factor levels
+fill.levels = function(x,y,...){
+  # x the data frame
+  # y the qustions as character vector
+  tmp = x[,grepl(y,names(x),fixed=T)]
+  # maxlev = which.max(unlist(lapply(tmp,function(x) length(levels(x)))))
+  # maxlev = levels(tmp[,maxlev])
+  maxlev = do.call(c,lapply(tmp,levels))
+  maxlev = unique(maxlev)
+  tmp = do.call(cbind.data.frame,lapply(tmp,function(x,y) x=factor(x,levels=y),y=maxlev))
+  x[,grepl(y,names(x),fixed=T)] = tmp
+  return(x)
+}
+
+# Rename factor levels new
+rm.char.factor = function(x){
+  # x the factor vector
+  if(is.factor(x)){
+    shitbug = c("æ","ø","å")
+    for(i in shitbug){
+      x = tolower(x)
+      x = gsub(" ","",x,fixed=T)
+      x = iconv(x, "latin1", "ASCII", sub="")
+    }
+    #x = factor(x)
+    return(x)
+  }
+  if(!is.factor(x)){
+    return(x)
+  }
+}
+
+# Cramer's V
+cv.test = function(x,y) {
+  CV = sqrt(chisq.test(x, y, correct=FALSE)$statistic /
+              (length(x) * (min(length(unique(x)),length(unique(y))) - 1)))
+  print.noquote("Cramér V / Phi:")
+  return(as.numeric(CV))
+}
 
 # Get T/F for questions 9, 10, 11 & 12
 get.binary = function(x,rev=F){
@@ -310,4 +349,76 @@ fkit2 = function(x, y = NULL, cex = 1, col= 3:4, scale = 1.1, ...){
   text(x=horiz/4, y = vert * scale, labels = t1, col=col[1], xpd=NA, cex=cex,...)
   text(x=3/4*horiz, y = vert * scale, labels = t2, xpd = NA, cex = cex, col = col[2], ...)
   text(x=horiz/2, y = vert * scale, labels = t3, col=col[1], xpd=NA, cex=cex,...)
+}
+
+wtf = function(x,y){
+  print(paste0("Cliff's :",cliff.delta(x,y)$estimate))
+  print(paste0("Corr :", cor(x,y)))
+  print(paste0("Chisq :", chisq.test(x,y)$p.value))
+  print(paste0("GKgamma :", GKgamma(table(x,y))$gamma))
+}
+
+# data frame factor to numerics
+fact2num = function(y,all=NULL){
+  if(is.null(all)){
+    print("opt1")
+    for(i in 1:ncol(y)){
+      y[,i] = as.numeric(as.character(y[,i]))
+    }
+    return(y)
+  }else{
+    print("opt2")
+    for(i in all){
+      y[,i] = as.numeric(as.character(y[,i]))
+    }
+    return(y)
+  }
+}
+
+
+# ordered factor to un-ordered factor. non factors remain the same
+ordfactor = function(x, ordered){
+  if(is.factor(x)){
+    return(factor(x, ordered = ordered))
+  }else{
+    return(x)
+  }
+}
+
+# as.unordered applied to data frames
+ordfactordf = function(x,ordered){
+  return(do.call(cbind.data.frame,lapply(x,ordfactor,ordered = ordered)))
+}
+
+
+# invert levels of  factors and factors in data.frames
+invert.level = function(x,vars = NULL){
+  # vars character string of vars to reverse
+  if(class(x)!= "data.frame"){
+    x = as.data.frame(x=x)
+  }
+  if(is.null(vars)){
+    x = do.call(cbind.data.frame,lapply(x,function(x) factor(x,labels=rev(levels(x)[levels(x)%in%unique(x)]))))
+  }
+  for(i in vars){
+    x[,i] = factor(x[,i],labels=rev(levels(x[,i])[levels(x[,i])%in%unique(x[,i])]))
+  }
+  return(x)
+}
+
+fkit = function(x,y=NULL,cex=2,col=3:4,...){
+  horiz = par("usr")[2]
+  vert = par("usr")[4]
+  m1 = round(mean(x),2)
+  sd1 = round(sd(x),2)
+  t1 = bquote(mu~.(m1)~sigma~.(sd1))
+  if(is.null(y)){
+    text(x = horiz/2, y = vert, labels = t1, xpd = NA, cex = cex, col = col[1], ...)
+    return()
+  }
+  m2 = round(mean(y),2)
+  sd2 = round(sd(y),2)
+  t2 = bquote(mu~.(m2)~sigma~.(sd2))
+  text(x=horiz/4, y = vert, labels = t1, col=col[1], xpd=NA, cex=cex,...)
+  text(x=3/4*horiz, y = vert, labels = t2, xpd = NA, cex = cex, col = col[2], ...)
 }

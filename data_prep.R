@@ -359,3 +359,6 @@ demo.dat = dfu[,c("q3.1_gender","q4.1_age","q6.1_school")]
 
 dfu$hour = hour(thetime)
 dfu$day = weekdays(thetime)
+
+
+save.image(".RData")
